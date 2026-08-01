@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPELAPPI — Monitoring</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="shell.js" defer></script>
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <div class="brand-block">
+          <div class="brand-crest" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-organization">Kemenkes</p>
+            <h1>RS Mata Cicendo</h1>
+          </div>
+        </div>
+
+        <nav class="side-menu" aria-label="Menu utama">
+          <a class="side-menu-item" href="index.html"><span class="side-menu-icon">⌂</span><span>Dashboard</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◌</span><span>Kewaspadaan Isolasi</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">▣</span><span>Bundles HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="rtl.html"><span class="side-menu-icon">✦</span><span>PPRA / RTL</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="notification.html"><span class="side-menu-icon">☍</span><span>Logbook IPCN</span></a>
+          <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☌</span><span>Laporan</span></a>
+          <a class="side-menu-item" href="admin.html"><span class="side-menu-icon">⚙</span><span>Pengaturan</span></a>
+        </nav>
+      </aside>
+
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div class="brand-banner">
+            <h2>SIMPELAPPI</h2>
+            <p>Sistem Informasi Monitoring, Pelaporan, Audit Pencegahan dan Pengendalian Infeksi</p>
+          </div>
+
+          <div class="topbar-tools">
+            <button class="icon-pill" type="button" aria-label="Notifikasi">
+              <span>🔔</span>
+              <strong>3</strong>
+            </button>
+            <button class="icon-pill" type="button" aria-label="Kalender">
+              <span>📅</span>
+            </button>
+            <div class="user-chip">
+              <div class="user-avatar">I</div>
+              <div>
+                <strong>IPCN Utama</strong>
+                <span>IPCN</span>
+              </div>
+              <span class="side-menu-caret">⌄</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="workspace-head">
+          <div>
+            <p class="eyebrow">Monitoring Digital</p>
+            <h3>Kepatuhan Hand Hygiene - ICU</h3>
+            <p class="workspace-subtitle">Observasi kepatuhan harian dengan bukti terstruktur</p>
+          </div>
+
+          <div class="workspace-filters">
+            <label class="filter-chip">
+              <span>📅</span>
+              <select aria-label="Periode monitoring">
+                <option>Juni 2026</option>
+                <option>Juli 2026</option>
+                <option>Agustus 2026</option>
+              </select>
+            </label>
+            <label class="filter-chip">
+              <span>▾</span>
+              <select aria-label="Unit monitoring">
+                <option>ICU</option>
+                <option>IGD</option>
+                <option>Rawat Inap</option>
+              </select>
+            </label>
+            <a class="btn btn-primary btn-export" href="report.html">⬇ Ekspor Rekap</a>
+          </div>
+        </section>
+
+        <section class="metric-grid monitor-metric-grid">
+          <article class="metric-card metric-green">
+            <div class="metric-icon">✋</div>
+            <div>
+              <p>Kepatuhan Hari Ini</p>
+              <strong>86,4%</strong>
+              <span>Target 85%</span>
+            </div>
+          </article>
+          <article class="metric-card metric-blue">
+            <div class="metric-icon">📌</div>
+            <div>
+              <p>Observasi Tercatat</p>
+              <strong>32</strong>
+              <span>Shift pagi & sore</span>
+            </div>
+          </article>
+          <article class="metric-card metric-orange">
+            <div class="metric-icon">⚠</div>
+            <div>
+              <p>Temuan Minor</p>
+              <strong>5</strong>
+              <span>Perlu tindak lanjut</span>
+            </div>
+          </article>
+        </section>
+
+        <section class="dashboard-grid monitor-board">
+          <article class="panel panel-span-2">
+            <div class="panel-header">
+              <h3>Form Monitoring Harian</h3>
+            </div>
+            <div class="form-card stack-card">
+              <div class="field-row">
+                <label>Unit</label>
+                <select title="Unit"><option>ICU</option></select>
+              </div>
+              <div class="field-row">
+                <label>Tanggal</label>
+                <input type="date" title="Tanggal" value="2026-08-01" />
+              </div>
+              <div class="field-row">
+                <label>Petugas</label>
+                <input type="text" title="Petugas" value="IPCLN" />
+              </div>
+
+              <div class="checklist">
+                <label><input type="checkbox" checked /> Hand Hygiene</label>
+                <label><input type="checkbox" checked /> APD</label>
+                <label><input type="checkbox" /> Linen</label>
+                <label><input type="checkbox" checked /> Pengelolaan Sampah</label>
+              </div>
+
+              <div class="photo-box">📷 Upload bukti foto</div>
+              <textarea rows="3" placeholder="Catatan observasi..."></textarea>
+
+              <div class="action-row">
+                <button class="btn btn-secondary">Simpan Draft</button>
+                <button class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header"><h3>Status Input</h3></div>
+            <ul class="notify-list">
+              <li>Shift Pagi: selesai</li>
+              <li>Shift Sore: on progress</li>
+              <li>Shift Malam: belum mulai</li>
+            </ul>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header"><h3>Checklist Kritis</h3></div>
+            <div class="task-list">
+              <div class="task-item"><span>5 Momen Cuci Tangan</span><strong>87%</strong></div>
+              <div class="task-item"><span>APD Sesuai SOP</span><strong>82%</strong></div>
+              <div class="task-item"><span>Linen Kotor</span><strong>79%</strong></div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,637 @@
+openapi: 3.1.0
+info:
+  title: SIMPELAPPI API
+  version: 1.0.0
+  description: Draft OpenAPI contract for SIMPELAPPI core services.
+servers:
+  - url: /api/v1
+security:
+  - bearerAuth: []
+tags:
+  - name: Auth
+  - name: Monitoring
+  - name: Audit
+  - name: RTL
+  - name: Surveilans
+  - name: Notification
+  - name: Dashboard
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+  /monitoring:
+    post:
+      tags: [Monitoring]
+      summary: Create monitoring draft
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMonitoringRequest'
+      responses:
+        '201':
+          description: Monitoring created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoringCreatedResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /monitoring/{monitoringId}/submit:
+    post:
+      tags: [Monitoring]
+      summary: Submit monitoring
+      parameters:
+        - $ref: '#/components/parameters/MonitoringIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [submittedBy]
+              properties:
+                submittedBy:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: Monitoring submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoringSubmitResponse'
+  /audit:
+    post:
+      tags: [Audit]
+      summary: Create audit draft
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAuditRequest'
+      responses:
+        '201':
+          description: Audit created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditCreatedResponse'
+  /audit/{auditId}/approval:
+    post:
+      tags: [Audit]
+      summary: Record audit approval
+      parameters:
+        - $ref: '#/components/parameters/AuditIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditApprovalRequest'
+      responses:
+        '200':
+          description: Approval recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditApprovalResponse'
+  /rtl:
+    post:
+      tags: [RTL]
+      summary: Create RTL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRtlRequest'
+      responses:
+        '201':
+          description: RTL created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RtlCreatedResponse'
+  /rtl/{rtlId}/progress:
+    patch:
+      tags: [RTL]
+      summary: Update RTL progress
+      parameters:
+        - $ref: '#/components/parameters/RtlIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRtlProgressRequest'
+      responses:
+        '200':
+          description: RTL updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RtlProgressResponse'
+  /surveilans/cases:
+    post:
+      tags: [Surveilans]
+      summary: Create surveillance case
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSurveillanceCaseRequest'
+      responses:
+        '201':
+          description: Case created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveillanceCaseCreatedResponse'
+  /notifications:
+    get:
+      tags: [Notification]
+      summary: List notifications
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - in: query
+          name: size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - in: query
+          name: isRead
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Notifications loaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationListResponse'
+  /notifications/{notificationId}/read:
+    patch:
+      tags: [Notification]
+      summary: Mark notification as read
+      parameters:
+        - $ref: '#/components/parameters/NotificationIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [readBy]
+              properties:
+                readBy:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: Notification updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envelope'
+  /dashboard/kpi:
+    get:
+      tags: [Dashboard]
+      summary: Get dashboard KPI by date and unit
+      parameters:
+        - in: query
+          name: date
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: unitId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: KPI data loaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardKpiResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    MonitoringIdPath:
+      in: path
+      name: monitoringId
+      required: true
+      schema:
+        type: string
+        format: uuid
+    AuditIdPath:
+      in: path
+      name: auditId
+      required: true
+      schema:
+        type: string
+        format: uuid
+    RtlIdPath:
+      in: path
+      name: rtlId
+      required: true
+      schema:
+        type: string
+        format: uuid
+    NotificationIdPath:
+      in: path
+      name: notificationId
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    Envelope:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    ErrorEnvelope:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+              field:
+                type: string
+              detail:
+                type: string
+    LoginResponse:
+      allOf:
+        - $ref: '#/components/schemas/Envelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                refreshToken:
+                  type: string
+                expiresIn:
+                  type: integer
+                user:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                      format: uuid
+                    fullName:
+                      type: string
+                    roleCode:
+                      type: string
+                    unitId:
+                      type: string
+                      format: uuid
+    CreateMonitoringRequest:
+      type: object
+      required: [monitoringDate, unitId, observerUserId, items]
+      properties:
+        monitoringDate:
+          type: string
+          format: date
+        unitId:
+          type: string
+          format: uuid
+        observerUserId:
+          type: string
+          format: uuid
+        templateId:
+          type: string
+          format: uuid
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [questionCode, answerValue, scoreValue]
+            properties:
+              questionCode:
+                type: string
+              answerValue:
+                type: string
+              scoreValue:
+                type: number
+              note:
+                type: string
+    MonitoringCreatedResponse:
+      allOf:
+        - $ref: '#/components/schemas/Envelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                monitoringId:
+                  type: string
+                  format: uuid
+                monitoringNo:
+                  type: string
+                status:
+                  type: string
+    MonitoringSubmitResponse:
+      allOf:
+        - $ref: '#/components/schemas/Envelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                monitoringId:
+                  type: string
+                  format: uuid
+                status:
+                  type: string
+                submittedAt:
+                  type: string
+                  format: date-time
+    CreateAuditRequest:
+      type: object
+      required: [auditDate, unitId, auditorUserId]
+      properties:
+        auditDate:
+          type: string
+          format: date
+        unitId:
+          type: string
+          format: uuid
+        auditorUserId:
+          type: string
+          format: uuid
+        findings:
+          type: array
+          items:
+            type: object
+            properties:
+              findingCategory:
+                type: string
+              findingDetail:
+                type: string
+              severityLevel:
+                type: string
+        recommendations:
+          type: array
+          items:
+            type: object
+            properties:
+              recommendationText:
+                type: string
+              dueDate:
+                type: string
+                format: date
+    AuditCreatedResponse:
+      allOf:
+        - $ref: '#/components/schemas/Envelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                auditId:
+                  type: string
+                  format: uuid
+                auditNo:
+                  type: string
+                status:
+                  type: string
+    AuditApprovalRequest:
+      type: object
+      required: [approverUserId, approvalStatus]
+      properties:
+        approverUserId:
+          type: string
+          format: uuid
+        approvalStatus:
+          type: string
+          enum: [approved, rejected, need_revision]
+        approvalNote:
+          type: string
+    AuditApprovalResponse:
+      allOf:
+        - $ref: '#/components/schemas/Envelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                auditId:
+                  type: string
+                  format: uuid
+                approvalStatus:
+                  type: string
+    CreateRtlRequest:
+      type: object
+      required: [sourceType, sourceId, rtlTitle, picUserId, unitId, dueDate]
+      properties:
+        sourceType:
+          type: string
+          enum: [audit, monitoring, analytics]
+        sourceId:
+          type: string
+          format: uuid
+        rtlTitle:
+          type: string
+        picUserId:
+          type: string
+          format: uuid
+        unitId:
+          type: string
+          format: uuid
+        dueDate:
+          type: string
+          format: date
+    RtlCreatedResponse:
+      allOf:
+        - $ref: '#/components/schemas/Envelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                rtlId:
+                  type: string
+                  format: uuid
+                rtlNo:
+                  type: string
+                status:
+                  type: string
+    UpdateRtlProgressRequest:
+      type: object
+      required: [progressPercent, updatedBy]
+      properties:
+        progressPercent:
+          type: number
+          minimum: 0
+          maximum: 100
+        comment:
+          type: string
+        updatedBy:
+          type: string
+          format: uuid
+    RtlProgressResponse:
+      allOf:
+        - $ref: '#/components/schemas/Envelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                rtlId:
+                  type: string
+                  format: uuid
+                progressPercent:
+                  type: number
+                status:
+                  type: string
+    CreateSurveillanceCaseRequest:
+      type: object
+      required: [mrn, fullName, unitId, diagnosisText, haiTypeCode]
+      properties:
+        mrn:
+          type: string
+        fullName:
+          type: string
+        unitId:
+          type: string
+          format: uuid
+        diagnosisText:
+          type: string
+        haiTypeCode:
+          type: string
+        organismName:
+          type: string
+    SurveillanceCaseCreatedResponse:
+      allOf:
+        - $ref: '#/components/schemas/Envelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                caseId:
+                  type: string
+                  format: uuid
+                caseNo:
+                  type: string
+                status:
+                  type: string
+    NotificationListResponse:
+      allOf:
+        - $ref: '#/components/schemas/Envelope'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  notificationId:
+                    type: string
+                    format: uuid
+                  title:
+                    type: string
+                  body:
+                    type: string
+                  sourceType:
+                    type: string
+                  sourceId:
+                    type: string
+                    format: uuid
+                  isRead:
+                    type: boolean
+                  createdAt:
+                    type: string
+                    format: date-time
+            meta:
+              type: object
+              properties:
+                page:
+                  type: integer
+                size:
+                  type: integer
+                total:
+                  type: integer
+    DashboardKpiResponse:
+      allOf:
+        - $ref: '#/components/schemas/Envelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date
+                unitId:
+                  type: string
+                  format: uuid
+                handHygieneRate:
+                  type: number
+                bundleComplianceRate:
+                  type: number
+                activeHaiCount:
+                  type: integer
+                openRtlCount:
+                  type: integer

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPELAPPI — Component Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell compact-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-logo">S</div>
+          <div>
+            <h1>SIMPELAPPI</h1>
+            <p>Component Library</p>
+          </div>
+        </div>
+        <nav class="nav-list">
+          <a class="nav-item" href="index.html">Dashboard</a>
+          <a class="nav-item" href="monitoring.html">Monitoring</a>
+          <a class="nav-item" href="admin.html">Admin</a>
+          <a class="nav-item active" href="component-library.html">Library</a>
+        </nav>
+      </aside>
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Design System</p>
+            <h2>UI Component Library</h2>
+          </div>
+        </header>
+
+        <section class="content-grid audit-grid">
+          <article class="card">
+            <div class="section-title"><h3>Buttons</h3></div>
+            <div class="action-row vertical-actions">
+              <button class="btn btn-primary">Primary</button>
+              <button class="btn btn-secondary">Secondary</button>
+              <button class="btn btn-secondary">Danger</button>
+            </div>
+          </article>
+          <article class="card">
+            <div class="section-title"><h3>Badges & Status</h3></div>
+            <span class="pill">Draft</span>
+            <span class="pill danger">Need Revision</span>
+          </article>
+          <article class="card wide-card">
+            <div class="section-title"><h3>Table Pattern</h3></div>
+            <div class="task-list">
+              <div class="task-item"><span>Monitoring ID</span><strong>MTR000023</strong></div>
+              <div class="task-item"><span>Unit</span><strong>ICU</strong></div>
+              <div class="task-item"><span>Status</span><strong>Validated</strong></div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

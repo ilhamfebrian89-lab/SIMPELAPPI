@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPELAPPI — PPI Command Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="shell.js" defer></script>
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <div class="brand-block">
+          <div class="brand-crest" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-organization">Kemenkes</p>
+            <h1>RS Mata Cicendo</h1>
+          </div>
+        </div>
+
+        <nav class="side-menu" aria-label="Menu utama">
+          <a class="side-menu-item" href="index.html"><span class="side-menu-icon">⌂</span><span>Dashboard</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◌</span><span>Kewaspadaan Isolasi</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">▣</span><span>Bundles HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="rtl.html"><span class="side-menu-icon">✦</span><span>PPRA / RTL</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">⌁</span><span>Pendidikan, Pelatihan & Edukasi PPI</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◔</span><span>Monitoring Lingkungan</span></a>
+          <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">✎</span><span>Audit</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">◉</span><span>ICRA</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⚠</span><span>Investigasi KLB</span></a>
+          <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☰</span><span>SKDR</span></a>
+          <a class="side-menu-item" href="notification.html"><span class="side-menu-icon">☍</span><span>Logbook IPCN</span></a>
+          <a class="side-menu-item" href="admin.html"><span class="side-menu-icon">◫</span><span>Dokumen</span></a>
+          <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☌</span><span>Laporan</span></a>
+          <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☑</span><span>Analisis</span></a>
+          <a class="side-menu-item" href="admin.html"><span class="side-menu-icon">⚙</span><span>Pengaturan</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="admin.html"><span class="side-menu-icon">⚙</span><span>Pengaturan</span></a>
+        </nav>
+      </aside>
+
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div class="brand-banner">
+            <h2>SIMPELAPPI</h2>
+            <p>Sistem Informasi Monitoring, Pelaporan, Audit Pencegahan dan Pengendalian Infeksi</p>
+          </div>
+
+          <div class="topbar-tools">
+            <button class="icon-pill" type="button" aria-label="Notifikasi">
+              <span>🔔</span>
+              <strong>5</strong>
+            </button>
+            <button class="icon-pill" type="button" aria-label="Kalender">
+              <span>📅</span>
+            </button>
+            <div class="user-chip">
+              <div class="user-avatar">I</div>
+              <div>
+                <strong>IPCN Utama</strong>
+                <span>IPCN</span>
+              </div>
+              <span class="side-menu-caret">⌄</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="workspace-head">
+          <div>
+            <p class="eyebrow">Selamat Datang, IPCN Utama</p>
+            <h3>Komite Pencegahan dan Pengendalian Infeksi</h3>
+            <p class="workspace-subtitle">RS Mata Cicendo Bandung</p>
+          </div>
+
+          <div class="workspace-filters">
+            <label class="filter-chip">
+              <span>📅</span>
+              <select aria-label="Bulan laporan">
+                <option>Juni 2026</option>
+                <option>Juli 2026</option>
+                <option>Agustus 2026</option>
+              </select>
+            </label>
+            <label class="filter-chip">
+              <span>▾</span>
+              <select aria-label="Unit">
+                <option>Semua Unit</option>
+                <option>ICU</option>
+                <option>Rawat Inap</option>
+              </select>
+            </label>
+            <a class="btn btn-primary btn-export" href="report.html">⬇ Ekspor Laporan</a>
+          </div>
+        </section>
+
+        <section class="metric-grid">
+          <article class="metric-card metric-blue">
+            <div class="metric-icon">📋</div>
+            <div>
+              <p>Total Audit</p>
+              <strong>156</strong>
+              <span>+12% dari Mei 2026</span>
+            </div>
+          </article>
+          <article class="metric-card metric-green">
+            <div class="metric-icon">✋</div>
+            <div>
+              <p>Kepatuhan Hand Hygiene</p>
+              <strong>86,4%</strong>
+              <span>+5,6% dari Mei 2026</span>
+            </div>
+          </article>
+          <article class="metric-card metric-orange">
+            <div class="metric-icon">😷</div>
+            <div>
+              <p>Kepatuhan APD</p>
+              <strong>82,1%</strong>
+              <span>+4,2% dari Mei 2026</span>
+            </div>
+          </article>
+          <article class="metric-card metric-purple">
+            <div class="metric-icon">☑</div>
+            <div>
+              <p>Kepatuhan Bundle</p>
+              <strong>78,6%</strong>
+              <span>+3,8% dari Mei 2026</span>
+            </div>
+          </article>
+          <article class="metric-card metric-red">
+            <div class="metric-icon">✹</div>
+            <div>
+              <p>HAI Rate (All)</p>
+              <strong>3,41</strong>
+              <span>/1000 HP, turun 0,67</span>
+            </div>
+          </article>
+          <article class="metric-card metric-teal">
+            <div class="metric-icon">🏥</div>
+            <div>
+              <p>Unit Terpantau</p>
+              <strong>32</strong>
+              <span>Dari 32 unit</span>
+            </div>
+          </article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="panel panel-span-2">
+            <div class="panel-header">
+              <h3>Kepatuhan Bundles HAIs</h3>
+            </div>
+            <div class="bundle-ring-grid">
+              <div class="ring-card ring-85 ring-blue">
+                <div class="ring-core"><strong>85%</strong><span>IDO</span></div>
+                <small>Target >= 90%</small>
+              </div>
+              <div class="ring-card ring-80 ring-green">
+                <div class="ring-core"><strong>80%</strong><span>CLABSI</span></div>
+                <small>Target >= 90%</small>
+              </div>
+              <div class="ring-card ring-78 ring-orange">
+                <div class="ring-core"><strong>78%</strong><span>CAUTI</span></div>
+                <small>Target >= 90%</small>
+              </div>
+              <div class="ring-card ring-82 ring-purple">
+                <div class="ring-core"><strong>82%</strong><span>VAP</span></div>
+                <small>Target >= 90%</small>
+              </div>
+              <div class="ring-card ring-76 ring-teal">
+                <div class="ring-core"><strong>76%</strong><span>IADP</span></div>
+                <small>Target >= 90%</small>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel panel-span-2">
+            <div class="panel-header">
+              <h3>Trend HAI Rate (per 1000 HP)</h3>
+              <label class="mini-select">
+                <select aria-label="Rentang trend">
+                  <option>6 Bulan Terakhir</option>
+                </select>
+              </label>
+            </div>
+            <div class="line-chart" aria-hidden="true">
+              <div class="line-grid"></div>
+              <div class="line-series series-blue"></div>
+              <div class="line-series series-green"></div>
+              <div class="line-series series-orange"></div>
+              <div class="line-series series-purple"></div>
+              <div class="line-series series-teal"></div>
+            </div>
+            <div class="chart-legend">
+              <span><i class="legend-dot dot-blue"></i>IDO</span>
+              <span><i class="legend-dot dot-green"></i>CLABSI</span>
+              <span><i class="legend-dot dot-orange"></i>CAUTI</span>
+              <span><i class="legend-dot dot-purple"></i>VAP</span>
+              <span><i class="legend-dot dot-teal"></i>IADP</span>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <h3>Kepatuhan Indikator PPI</h3>
+              <label class="mini-select">
+                <select aria-label="Bulan indikator">
+                  <option>Juni 2026</option>
+                </select>
+              </label>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-column bar-h-864 bar-blue"><span>86,4%</span><label>Kebersihan Tangan</label></div>
+              <div class="bar-column bar-h-821 bar-green"><span>82,1%</span><label>APD</label></div>
+              <div class="bar-column bar-h-873 bar-orange"><span>87,3%</span><label>Etika Batuk</label></div>
+              <div class="bar-column bar-h-847 bar-purple"><span>84,7%</span><label>Limbah</label></div>
+              <div class="bar-column bar-h-805 bar-teal"><span>80,5%</span><label>Dekontaminasi</label></div>
+              <div class="bar-column bar-h-812 bar-rose"><span>81,2%</span><label>Kebersihan Lingkungan</label></div>
+              <div class="bar-column bar-h-889 bar-sky"><span>88,9%</span><label>Penempatan Pasien</label></div>
+              <div class="bar-column bar-h-901 bar-green"><span>90,1%</span><label>Injeksi Aman</label></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <h3>10 Unit dengan Kepatuhan Terendah</h3>
+            </div>
+            <ol class="rank-list">
+              <li><span>ICU Mata</span><strong>72%</strong></li>
+              <li><span>ICU Anak</span><strong>74%</strong></li>
+              <li><span>Instalasi Gawat Darurat</span><strong>75%</strong></li>
+              <li><span>Ruang Isolasi</span><strong>76%</strong></li>
+              <li><span>Rawat Inap Melati</span><strong>77%</strong></li>
+              <li><span>Rawat Inap Dahlia</span><strong>78%</strong></li>
+              <li><span>Rawat Inap Anggrek</span><strong>79%</strong></li>
+              <li><span>Rawat Inap Mawar</span><strong>80%</strong></li>
+              <li><span>Instalasi Bedah Sentral</span><strong>81%</strong></li>
+              <li><span>Poliklinik</span><strong>82%</strong></li>
+            </ol>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <h3>Notifikasi</h3>
+              <a class="panel-link" href="notification.html">Lihat Semua</a>
+            </div>
+            <div class="notification-stack">
+              <div class="notice-item danger"><strong>Audit Hand Hygiene IGD</strong><span>Belum diisi hari ini</span><small>10 menit yang lalu</small></div>
+              <div class="notice-item warning"><strong>Bundle IDO OK belum lengkap</strong><span>IDO - 3 pasien</span><small>1 jam yang lalu</small></div>
+              <div class="notice-item danger"><strong>HAI baru terdeteksi</strong><span>1 kasus CAUTI di ICU</span><small>2 jam yang lalu</small></div>
+              <div class="notice-item info"><strong>Surveilans belum divalidasi</strong><span>5 kasus menunggu validasi</span><small>3 jam yang lalu</small></div>
+              <div class="notice-item success"><strong>Pelatihan PPI dasar</strong><span>Jadwal 25 Juni 2026</span><small>1 hari yang lalu</small></div>
+            </div>
+          </article>
+
+          <article class="panel panel-span-2 quick-panel">
+            <div class="panel-header">
+              <h3>Akses Cepat</h3>
+            </div>
+            <div class="quick-grid">
+              <a class="quick-item" href="audit.html"><span>📋</span><strong>Input Audit</strong></a>
+              <a class="quick-item" href="monitoring.html"><span>🧾</span><strong>Input Bundle</strong></a>
+              <a class="quick-item" href="surveilans.html"><span>⚠</span><strong>Input HAI</strong></a>
+              <a class="quick-item" href="monitoring.html"><span>🖥</span><strong>Monitoring Lingkungan</strong></a>
+              <a class="quick-item" href="notification.html"><span>📘</span><strong>Logbook IPCN</strong></a>
+              <a class="quick-item" href="surveilans.html"><span>🔎</span><strong>Surveilans</strong></a>
+              <a class="quick-item" href="rtl.html"><span>💊</span><strong>PPRA</strong></a>
+              <a class="quick-item" href="audit.html"><span>🏥</span><strong>ICRA</strong></a>
+              <a class="quick-item" href="admin.html"><span>🗂</span><strong>Dokumen</strong></a>
+              <a class="quick-item" href="report.html"><span>📈</span><strong>Laporan</strong></a>
+            </div>
+          </article>
+
+          <article class="panel calendar-panel">
+            <div class="panel-header">
+              <h3>Kalender Kegiatan</h3>
+            </div>
+            <div class="calendar-shell">
+              <div class="calendar-head">
+                <span>‹</span>
+                <strong>Juni 2026</strong>
+                <span>›</span>
+              </div>
+              <div class="calendar-grid">
+                <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
+                <span>8</span><span>9</span><span>10</span><span>11</span><span class="active-day">12</span><span>13</span><span>14</span>
+                <span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span>
+                <span>22</span><span>23</span><span>24</span><span>25</span><span class="active-day">26</span><span>27</span><span>28</span>
+                <span>29</span><span>30</span>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

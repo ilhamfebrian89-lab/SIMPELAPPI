@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPELAPPI — Audit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="shell.js" defer></script>
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <div class="brand-block">
+          <div class="brand-crest" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-organization">Kemenkes</p>
+            <h1>RS Mata Cicendo</h1>
+          </div>
+        </div>
+
+        <nav class="side-menu" aria-label="Menu utama">
+          <a class="side-menu-item" href="index.html"><span class="side-menu-icon">⌂</span><span>Dashboard</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◌</span><span>Kewaspadaan Isolasi</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">▣</span><span>Bundles HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="rtl.html"><span class="side-menu-icon">✦</span><span>PPRA / RTL</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="notification.html"><span class="side-menu-icon">☍</span><span>Logbook IPCN</span></a>
+          <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☌</span><span>Laporan</span></a>
+          <a class="side-menu-item" href="admin.html"><span class="side-menu-icon">⚙</span><span>Pengaturan</span></a>
+        </nav>
+      </aside>
+
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div class="brand-banner">
+            <h2>SIMPELAPPI</h2>
+            <p>Sistem Informasi Monitoring, Pelaporan, Audit Pencegahan dan Pengendalian Infeksi</p>
+          </div>
+
+          <div class="topbar-tools">
+            <button class="icon-pill" type="button" aria-label="Notifikasi">
+              <span>🔔</span>
+              <strong>3</strong>
+            </button>
+            <button class="icon-pill" type="button" aria-label="Kalender">
+              <span>📅</span>
+            </button>
+            <div class="user-chip">
+              <div class="user-avatar">I</div>
+              <div>
+                <strong>IPCN Utama</strong>
+                <span>IPCN</span>
+              </div>
+              <span class="side-menu-caret">⌄</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="workspace-head">
+          <div>
+            <p class="eyebrow">Audit Digital</p>
+            <h3>Form Audit Kepatuhan PPI</h3>
+            <p class="workspace-subtitle">Input temuan audit, skor, dan rencana tindak lanjut unit</p>
+          </div>
+
+          <div class="workspace-filters">
+            <div class="draft-indicator" id="draftIndicator">Draft belum disimpan</div>
+            <a class="btn btn-secondary" href="report.html">Lihat Rekap</a>
+          </div>
+        </section>
+
+        <div class="inline-alert" id="inlineAlert" role="status" aria-live="polite"></div>
+
+        <section class="dashboard-grid audit-board">
+          <article class="card">
+            <div class="section-title"><h3>Identitas</h3></div>
+            <div class="field-row"><label for="auditUnit">Unit</label><select id="auditUnit" title="Unit"><option>ICU</option><option>ED</option><option>HCU</option></select></div>
+            <div class="field-row"><label for="auditAuditor">Auditor</label><input id="auditAuditor" type="text" title="Auditor" value="IPCN" /></div>
+            <div class="field-row"><label for="auditDate">Tanggal Audit</label><input id="auditDate" type="date" title="Tanggal Audit" value="2026-08-01" /></div>
+            <div class="field-row"><label for="auditTemplate">Template Audit</label><select id="auditTemplate" title="Template Audit"><option>AUD-HH-ICU</option><option>AUD-APD-ED</option><option>AUD-LINEN-GEN</option></select></div>
+          </article>
+
+          <article class="card">
+            <div class="section-title">
+              <h3>Skor</h3>
+              <span class="status-chip status-mid" id="auditStatusChip">Need Review</span>
+            </div>
+            <div class="score-box score-mid" id="auditScoreBox">
+              <strong id="auditScoreValue">60</strong>
+              <span>Skor Akhir</span>
+            </div>
+          </article>
+
+          <article class="card wide-card">
+            <div class="section-title"><h3>Checklist Audit</h3></div>
+            <div class="audit-checklist" id="auditChecklist">
+              <div class="audit-item">
+                <p>Hand hygiene sebelum kontak pasien</p>
+                <select data-score-select title="Kepatuhan hand hygiene sebelum kontak pasien" aria-label="Kepatuhan hand hygiene sebelum kontak pasien">
+                  <option value="0">Tidak patuh</option>
+                  <option value="1" selected>Patuh</option>
+                </select>
+              </div>
+              <div class="audit-item">
+                <p>Hand hygiene setelah kontak pasien</p>
+                <select data-score-select title="Kepatuhan hand hygiene setelah kontak pasien" aria-label="Kepatuhan hand hygiene setelah kontak pasien">
+                  <option value="0">Tidak patuh</option>
+                  <option value="1" selected>Patuh</option>
+                </select>
+              </div>
+              <div class="audit-item">
+                <p>Penggunaan APD sesuai risiko</p>
+                <select data-score-select title="Kepatuhan penggunaan APD sesuai risiko" aria-label="Kepatuhan penggunaan APD sesuai risiko">
+                  <option value="0">Tidak patuh</option>
+                  <option value="1" selected>Patuh</option>
+                </select>
+              </div>
+              <div class="audit-item">
+                <p>Pemilahan linen infeksius</p>
+                <select data-score-select title="Kepatuhan pemilahan linen infeksius" aria-label="Kepatuhan pemilahan linen infeksius">
+                  <option value="0" selected>Tidak patuh</option>
+                  <option value="1">Patuh</option>
+                </select>
+              </div>
+              <div class="audit-item">
+                <p>Kelengkapan dokumentasi unit</p>
+                <select data-score-select title="Kepatuhan kelengkapan dokumentasi unit" aria-label="Kepatuhan kelengkapan dokumentasi unit">
+                  <option value="0" selected>Tidak patuh</option>
+                  <option value="1">Patuh</option>
+                </select>
+              </div>
+            </div>
+          </article>
+
+          <article class="card wide-card">
+            <div class="section-title"><h3>Temuan dan Rekomendasi</h3></div>
+            <div class="field-row">
+              <label for="auditFinding">Temuan Utama</label>
+              <textarea id="auditFinding" rows="3" title="Temuan Utama">Hand hygiene saat transfer pasien belum konsisten.</textarea>
+              <small class="input-error" id="auditFindingError"></small>
+            </div>
+            <div class="field-row">
+              <label for="auditRecommendation">Rekomendasi</label>
+              <textarea id="auditRecommendation" rows="4" title="Rekomendasi">Lakukan edukasi lintas shift dan evaluasi harian selama 7 hari.</textarea>
+              <small class="input-error" id="auditRecommendationError"></small>
+            </div>
+            <div class="action-row">
+              <button class="btn btn-secondary" id="saveDraftButton" type="button">Simpan Draft</button>
+              <button class="btn btn-secondary" id="clearDraftButton" type="button">Hapus Draft</button>
+              <button class="btn btn-secondary" id="resetFormButton" type="button">Reset Form</button>
+              <button class="btn btn-secondary" id="undoResetButton" type="button" disabled>Undo Reset</button>
+              <a class="btn btn-secondary" href="error-state.html">Simulasi Error</a>
+              <button class="btn btn-primary" id="submitAuditButton" type="button">Submit Audit</button>
+            </div>
+            <p class="autosave-meta" id="lastAutosaveInfo">Belum pernah autosave.</p>
+            <p class="autosave-meta autosave-activity" id="autosaveActivityInfo" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+            <p class="autosave-meta shortcut-hint" id="saveShortcutHint">Tip: tekan Ctrl+S untuk simpan draft.</p>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="audit.js"></script>
+  </body>
+</html>

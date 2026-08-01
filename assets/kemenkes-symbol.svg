@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title desc">
+  <title id="title">Simbol Kemenkes</title>
+  <desc id="desc">Simbol bunga silang Kemenkes versi ringkas.</desc>
+
+  <defs>
+    <linearGradient id="s-teal" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#22b8a7"/>
+      <stop offset="1" stop-color="#11998f"/>
+    </linearGradient>
+    <linearGradient id="s-lime" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#b6d93b"/>
+      <stop offset="1" stop-color="#d7e35a"/>
+    </linearGradient>
+    <linearGradient id="s-yellow" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f4e600"/>
+      <stop offset="1" stop-color="#d9d400"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="38" y="4" width="26" height="40" rx="12" fill="url(#s-teal)"/>
+  <rect x="38" y="76" width="26" height="40" rx="12" fill="url(#s-teal)"/>
+  <rect x="4" y="46" width="40" height="26" rx="12" fill="url(#s-teal)"/>
+  <path d="M64 46h18c16 0 29 13 29 29s-13 29-29 29H64z" fill="url(#s-lime)"/>
+
+  <path d="M64 46l27 29-27 29" fill="none" stroke="url(#s-yellow)" stroke-width="3"/>
+  <path d="M44 46v58" fill="none" stroke="url(#s-yellow)" stroke-width="3"/>
+  <path d="M44 75h39" fill="none" stroke="url(#s-yellow)" stroke-width="3"/>
+</svg>

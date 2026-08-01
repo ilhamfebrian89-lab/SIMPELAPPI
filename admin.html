@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPELAPPI — Administration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="shell.js" defer></script>
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <div class="brand-block">
+          <div class="brand-crest" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-organization">Kemenkes</p>
+            <h1>RS Mata Cicendo</h1>
+          </div>
+        </div>
+
+        <nav class="side-menu" aria-label="Menu utama">
+          <a class="side-menu-item" href="index.html"><span class="side-menu-icon">⌂</span><span>Dashboard</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◌</span><span>Kewaspadaan Isolasi</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">▣</span><span>Bundles HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="rtl.html"><span class="side-menu-icon">✦</span><span>PPRA / RTL</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☌</span><span>Laporan</span></a>
+          <a class="side-menu-item" href="admin.html"><span class="side-menu-icon">⚙</span><span>Pengaturan</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="profile.html"><span class="side-menu-icon">◉</span><span>Profile</span></a>
+        </nav>
+      </aside>
+
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div class="brand-banner">
+            <h2>SIMPELAPPI</h2>
+            <p>Sistem Informasi Monitoring, Pelaporan, Audit Pencegahan dan Pengendalian Infeksi</p>
+          </div>
+          <div class="topbar-tools">
+            <button class="icon-pill" type="button" aria-label="Notifikasi"><span>🔔</span><strong>1</strong></button>
+            <button class="icon-pill" type="button" aria-label="Kalender"><span>📅</span></button>
+            <div class="user-chip"><div class="user-avatar">I</div><div><strong>IPCN Utama</strong><span>IPCN</span></div><span class="side-menu-caret">⌄</span></div>
+          </div>
+        </header>
+
+        <section class="workspace-head">
+          <div>
+            <p class="eyebrow">Administration Panel</p>
+            <h3>Konfigurasi Sistem</h3>
+            <p class="workspace-subtitle">Kelola master data, user, dan alur persetujuan aplikasi</p>
+          </div>
+          <div class="workspace-filters">
+            <a class="btn btn-primary btn-export" href="admin.html">+ Tambah Master Data</a>
+          </div>
+        </section>
+
+        <section class="metric-grid monitor-metric-grid">
+          <article class="metric-card metric-blue"><div class="metric-icon">🧩</div><div><p>Master Data</p><strong>18</strong><span>Unit aktif</span></div></article>
+          <article class="metric-card metric-purple"><div class="metric-icon">👥</div><div><p>Total User</p><strong>126</strong><span>11 user baru bulan ini</span></div></article>
+          <article class="metric-card metric-teal"><div class="metric-icon">☑</div><div><p>Workflow Aktif</p><strong>9</strong><span>Semua sinkron</span></div></article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="panel">
+            <div class="section-title"><h3>Master Data</h3></div>
+            <div class="task-list">
+              <div class="task-item"><span>Unit</span><strong>18</strong></div>
+              <div class="task-item"><span>User</span><strong>126</strong></div>
+              <div class="task-item"><span>Form Template</span><strong>42</strong></div>
+            </div>
+          </article>
+          <article class="panel">
+            <div class="section-title"><h3>Workflow</h3></div>
+            <div class="task-list">
+              <div class="task-item"><span>Audit Approval</span><strong>Active</strong></div>
+              <div class="task-item"><span>RTL Escalation</span><strong>Active</strong></div>
+              <div class="task-item"><span>Notification Rules</span><strong>Active</strong></div>
+            </div>
+          </article>
+
+          <article class="panel panel-span-2">
+            <div class="section-title"><h3>Aksi Cepat Admin</h3></div>
+            <div class="quick-grid">
+              <a class="quick-item" href="admin.html"><span>🧱</span><strong>Tambah Unit</strong></a>
+              <a class="quick-item" href="admin.html"><span>👤</span><strong>Buat User</strong></a>
+              <a class="quick-item" href="admin.html"><span>🗂</span><strong>Template Audit</strong></a>
+              <a class="quick-item" href="admin.html"><span>🔒</span><strong>Atur Role</strong></a>
+              <a class="quick-item" href="admin.html"><span>⚙</span><strong>Atur Workflow</strong></a>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

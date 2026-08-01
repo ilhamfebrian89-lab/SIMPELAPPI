@@ -1,0 +1,155 @@
+{
+  "info": {
+    "name": "SIMPELAPPI API v1 - OWN-UNIT RBAC Tests",
+    "_postman_id": "5fcbf388-cc58-44d9-8d66-0ad7041f6773",
+    "description": "RBAC tests for OWN-UNIT enforcement scenarios.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "UNIT_HEAD Own Unit Access",
+      "item": [
+        {
+          "name": "Update RTL progress in own unit (expect 200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status should be 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{unitHeadToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"progressPercent\": 75,\n  \"comment\": \"update dari kepala ruangan unit sendiri\",\n  \"updatedBy\": \"22222222-2222-2222-2222-222222222225\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rtl/{{rtlOwnUnitId}}/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["rtl", "{{rtlOwnUnitId}}", "progress"]
+            }
+          }
+        },
+        {
+          "name": "Update RTL progress in other unit (expect 403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status should be 403', function () { pm.response.to.have.status(403); });",
+                  "pm.test('Error code should be AUTH-403', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.expect(jsonData.errors[0].code).to.eql('AUTH-403');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{unitHeadToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"progressPercent\": 80,\n  \"comment\": \"coba lintas unit\",\n  \"updatedBy\": \"22222222-2222-2222-2222-222222222225\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rtl/{{rtlOtherUnitId}}/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["rtl", "{{rtlOtherUnitId}}", "progress"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "IPCLN Own Unit Report Scope",
+      "item": [
+        {
+          "name": "Get own unit dashboard KPI (expect 200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status should be 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ipclnToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/kpi?date=2026-08-01&unitId={{ownUnitId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "kpi"],
+              "query": [
+                { "key": "date", "value": "2026-08-01" },
+                { "key": "unitId", "value": "{{ownUnitId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get other unit dashboard KPI (expect 403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status should be 403', function () { pm.response.to.have.status(403); });",
+                  "pm.test('Error code should be AUTH-403', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.expect(jsonData.errors[0].code).to.eql('AUTH-403');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ipclnToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/kpi?date=2026-08-01&unitId={{otherUnitId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "kpi"],
+              "query": [
+                { "key": "date", "value": "2026-08-01" },
+                { "key": "unitId", "value": "{{otherUnitId}}" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api/v1" },
+    { "key": "unitHeadToken", "value": "" },
+    { "key": "ipclnToken", "value": "" },
+    { "key": "ownUnitId", "value": "11111111-1111-1111-1111-111111111111" },
+    { "key": "otherUnitId", "value": "11111111-1111-1111-1111-111111111112" },
+    { "key": "rtlOwnUnitId", "value": "77777777-7777-7777-7777-777777777701" },
+    { "key": "rtlOtherUnitId", "value": "77777777-7777-7777-7777-777777777702" }
+  ]
+}

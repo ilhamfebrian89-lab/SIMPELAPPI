@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPELAPPI — RTL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="shell.js" defer></script>
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <div class="brand-block">
+          <div class="brand-crest" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-organization">Kemenkes</p>
+            <h1>RS Mata Cicendo</h1>
+          </div>
+        </div>
+
+        <nav class="side-menu" aria-label="Menu utama">
+          <a class="side-menu-item" href="index.html"><span class="side-menu-icon">⌂</span><span>Dashboard</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◌</span><span>Kewaspadaan Isolasi</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">▣</span><span>Bundles HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="rtl.html"><span class="side-menu-icon">✦</span><span>PPRA / RTL</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">⌁</span><span>Pendidikan, Pelatihan & Edukasi PPI</span></a>
+          <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">✎</span><span>Audit</span></a>
+          <a class="side-menu-item" href="notification.html"><span class="side-menu-icon">☍</span><span>Logbook IPCN</span></a>
+          <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☌</span><span>Laporan</span></a>
+          <a class="side-menu-item" href="admin.html"><span class="side-menu-icon">⚙</span><span>Pengaturan</span></a>
+        </nav>
+      </aside>
+
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div class="brand-banner">
+            <h2>SIMPELAPPI</h2>
+            <p>Sistem Informasi Monitoring, Pelaporan, Audit Pencegahan dan Pengendalian Infeksi</p>
+          </div>
+
+          <div class="topbar-tools">
+            <button class="icon-pill" type="button" aria-label="Notifikasi">
+              <span>🔔</span>
+              <strong>4</strong>
+            </button>
+            <button class="icon-pill" type="button" aria-label="Kalender">
+              <span>📅</span>
+            </button>
+            <div class="user-chip">
+              <div class="user-avatar">I</div>
+              <div>
+                <strong>IPCN Utama</strong>
+                <span>IPCN</span>
+              </div>
+              <span class="side-menu-caret">⌄</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="workspace-head">
+          <div>
+            <p class="eyebrow">Task Management</p>
+            <h3>Rencana Tindak Lanjut (RTL)</h3>
+            <p class="workspace-subtitle">Pelacakan progres temuan audit dan monitoring lintas unit</p>
+          </div>
+
+          <div class="workspace-filters">
+            <label class="filter-chip">
+              <span>📅</span>
+              <select aria-label="Periode RTL">
+                <option>Juni 2026</option>
+                <option>Juli 2026</option>
+                <option>Agustus 2026</option>
+              </select>
+            </label>
+            <label class="filter-chip">
+              <span>▾</span>
+              <select aria-label="Status RTL">
+                <option>Semua Status</option>
+                <option>Open</option>
+                <option>In Progress</option>
+                <option>Need Review</option>
+              </select>
+            </label>
+            <a class="btn btn-primary btn-export" href="audit.html">+ Buat RTL Baru</a>
+          </div>
+        </section>
+
+        <section class="metric-grid rtl-metric-grid">
+          <article class="metric-card metric-orange">
+            <div class="metric-icon">⏳</div>
+            <div>
+              <p>Open RTL</p>
+              <strong>27</strong>
+              <span>8 item butuh aksi cepat</span>
+            </div>
+          </article>
+          <article class="metric-card metric-blue">
+            <div class="metric-icon">↻</div>
+            <div>
+              <p>In Progress</p>
+              <strong>14</strong>
+              <span>Naik 2 item minggu ini</span>
+            </div>
+          </article>
+          <article class="metric-card metric-green">
+            <div class="metric-icon">✓</div>
+            <div>
+              <p>Closed</p>
+              <strong>39</strong>
+              <span>77% selesai tepat waktu</span>
+            </div>
+          </article>
+        </section>
+
+        <section class="dashboard-grid rtl-board">
+          <article class="panel panel-span-2">
+            <div class="panel-header">
+              <h3>Prioritas RTL Minggu Ini</h3>
+            </div>
+            <div class="task-list">
+              <div class="task-item"><span>ICU - Hand Hygiene</span><strong>68%</strong></div>
+              <div class="progress-track"><div class="progress-bar progress-bar-68"></div></div>
+              <div class="task-item"><span>IGD - Bundle IDO</span><strong>52%</strong></div>
+              <div class="progress-track"><div class="progress-bar progress-bar-52"></div></div>
+              <div class="task-item"><span>Rawat Inap - APD Shift Malam</span><strong>74%</strong></div>
+              <div class="progress-track"><div class="progress-bar progress-bar-74"></div></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <h3>Status Distribusi</h3>
+            </div>
+            <div class="status-stack">
+              <div class="status-chip status-good">Closed: 39</div>
+              <div class="status-chip status-mid">Need Review: 11</div>
+              <div class="status-chip status-low">Overdue: 8</div>
+            </div>
+          </article>
+
+          <article class="panel panel-span-2">
+            <div class="panel-header">
+              <h3>Detail RTL Aktif</h3>
+            </div>
+            <div class="form-card">
+              <div class="field-row"><label>Judul RTL</label><input type="text" title="Judul RTL" value="Peningkatan kepatuhan Hand Hygiene ICU" /></div>
+              <div class="field-row"><label>PIC</label><input type="text" title="PIC" value="Kepala Ruangan" /></div>
+              <div class="field-row"><label>Deadline</label><input type="date" title="Deadline" value="2026-08-05" /></div>
+              <div class="field-row"><label>Status</label><select title="Status"><option>In Progress</option><option>Need Review</option><option>Closed</option></select></div>
+              <textarea rows="4" title="Komentar dan evidence">Pembinaan lintas shift telah dilaksanakan. Bukti foto dan rekap monitoring sudah ada.</textarea>
+              <div class="action-row">
+                <button class="btn btn-secondary">Lihat Timeline</button>
+                <button class="btn btn-primary">Close RTL</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header"><h3>Timeline</h3></div>
+            <ul class="notify-list">
+              <li>01 Jun - RTL dibuat oleh IPCN</li>
+              <li>08 Jun - Evidence awal diunggah</li>
+              <li>15 Jun - Review kepala unit</li>
+              <li>28 Jun - Revisi minor diminta</li>
+            </ul>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header"><h3>Evidence</h3></div>
+            <ul class="notify-list">
+              <li>foto-hh-shift-pagi.jpg</li>
+              <li>rekap-observasi-juni.xlsx</li>
+              <li>notulen-pembinaan.pdf</li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

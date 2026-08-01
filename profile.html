@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPELAPPI — Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="shell.js" defer></script>
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <div class="brand-block">
+          <div class="brand-crest" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-organization">Kemenkes</p>
+            <h1>RS Mata Cicendo</h1>
+          </div>
+        </div>
+
+        <nav class="side-menu" aria-label="Menu utama">
+          <a class="side-menu-item" href="index.html"><span class="side-menu-icon">⌂</span><span>Dashboard</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◌</span><span>Kewaspadaan Isolasi</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">▣</span><span>Bundles HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="rtl.html"><span class="side-menu-icon">✦</span><span>PPRA / RTL</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☌</span><span>Laporan</span></a>
+          <a class="side-menu-item" href="profile.html"><span class="side-menu-icon">◉</span><span>Profile</span></a>
+          <a class="side-menu-item" href="admin.html"><span class="side-menu-icon">⚙</span><span>Pengaturan</span></a>
+        </nav>
+      </aside>
+
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div class="brand-banner">
+            <h2>SIMPELAPPI</h2>
+            <p>Sistem Informasi Monitoring, Pelaporan, Audit Pencegahan dan Pengendalian Infeksi</p>
+          </div>
+          <div class="topbar-tools">
+            <button class="icon-pill" type="button" aria-label="Notifikasi"><span>🔔</span><strong>2</strong></button>
+            <button class="icon-pill" type="button" aria-label="Kalender"><span>📅</span></button>
+            <div class="user-chip"><div class="user-avatar">I</div><div><strong>IPCN Utama</strong><span>IPCN</span></div><span class="side-menu-caret">⌄</span></div>
+          </div>
+        </header>
+
+        <section class="workspace-head">
+          <div>
+            <p class="eyebrow">User Profile</p>
+            <h3>Pengaturan Akun</h3>
+            <p class="workspace-subtitle">Kelola identitas pengguna, keamanan akun, dan preferensi tampilan</p>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="panel form-card">
+            <div class="profile-avatar">IP</div>
+            <div class="field-row"><label>Nama</label><input type="text" title="Nama" value="Indah Permata" /></div>
+            <div class="field-row"><label>Unit</label><input type="text" title="Unit" value="ICU" /></div>
+            <div class="field-row"><label>Profesi</label><input type="text" title="Profesi" value="IPCN" /></div>
+            <div class="field-row"><label>Role</label><input type="text" title="Role" value="Supervisor PPI" /></div>
+          </article>
+          <article class="panel form-card">
+            <div class="section-title"><h3>Theme & Security</h3></div>
+            <div class="field-row"><label>Password</label><input type="password" title="Password" value="password123" /></div>
+            <div class="field-row"><label>Theme</label><select title="Theme"><option>Light</option></select></div>
+            <div class="action-row">
+              <button class="btn btn-secondary">Logout</button>
+              <button class="btn btn-primary">Save Profile</button>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="section-title"><h3>Aktivitas Terakhir</h3></div>
+            <ul class="notify-list">
+              <li>Login terakhir: 01/08/2026 08:13</li>
+              <li>Update profil: 30/07/2026 16:40</li>
+              <li>Ganti kata sandi: 22/07/2026 11:22</li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

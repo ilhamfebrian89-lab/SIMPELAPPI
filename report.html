@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPELAPPI — Laporan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="shell.js" defer></script>
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <div class="brand-block">
+          <div class="brand-crest" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-organization">Kemenkes</p>
+            <h1>RS Mata Cicendo</h1>
+          </div>
+        </div>
+
+        <nav class="side-menu" aria-label="Menu utama">
+          <a class="side-menu-item" href="index.html"><span class="side-menu-icon">⌂</span><span>Dashboard</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◌</span><span>Kewaspadaan Isolasi</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">▣</span><span>Bundles HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="rtl.html"><span class="side-menu-icon">✦</span><span>PPRA / RTL</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="notification.html"><span class="side-menu-icon">☍</span><span>Logbook IPCN</span></a>
+          <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☌</span><span>Laporan</span></a>
+          <a class="side-menu-item" href="admin.html"><span class="side-menu-icon">⚙</span><span>Pengaturan</span></a>
+        </nav>
+      </aside>
+
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div class="brand-banner">
+            <h2>SIMPELAPPI</h2>
+            <p>Sistem Informasi Monitoring, Pelaporan, Audit Pencegahan dan Pengendalian Infeksi</p>
+          </div>
+
+          <div class="topbar-tools">
+            <button class="icon-pill" type="button" aria-label="Notifikasi">
+              <span>🔔</span>
+              <strong>2</strong>
+            </button>
+            <button class="icon-pill" type="button" aria-label="Kalender">
+              <span>📅</span>
+            </button>
+            <div class="user-chip">
+              <div class="user-avatar">I</div>
+              <div>
+                <strong>IPCN Utama</strong>
+                <span>IPCN</span>
+              </div>
+              <span class="side-menu-caret">⌄</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="workspace-head">
+          <div>
+            <p class="eyebrow">Reporting Engine</p>
+            <h3>Preview Laporan Kinerja PPI</h3>
+            <p class="workspace-subtitle">Susun ringkasan bulanan, bandingkan antar unit, lalu ekspor</p>
+          </div>
+
+          <div class="workspace-filters">
+            <label class="filter-chip">
+              <span>📅</span>
+              <select title="Bulan">
+                <option>Agustus 2026</option>
+                <option>Juli 2026</option>
+                <option>Juni 2026</option>
+              </select>
+            </label>
+            <label class="filter-chip">
+              <span>▾</span>
+              <select title="Unit">
+                <option>Semua Unit</option>
+                <option>ICU</option>
+                <option>IGD</option>
+              </select>
+            </label>
+            <a class="btn btn-primary btn-export" href="report.html">⤓ Ekspor Laporan</a>
+          </div>
+        </section>
+
+        <section class="dashboard-grid report-board">
+          <article class="panel">
+            <div class="panel-header"><h3>Ekspor Cepat</h3></div>
+            <div class="action-row vertical-actions">
+              <button class="btn btn-primary">PDF</button>
+              <button class="btn btn-secondary">Excel</button>
+              <button class="btn btn-secondary">Print</button>
+            </div>
+          </article>
+
+          <article class="panel panel-span-2">
+            <div class="panel-header"><h3>Preview KPI</h3></div>
+            <div class="metric-grid report-metric-grid">
+              <article class="metric-card metric-green">
+                <div class="metric-icon">✋</div>
+                <div><p>Hand Hygiene</p><strong>89%</strong><span>Target 85%</span></div>
+              </article>
+              <article class="metric-card metric-purple">
+                <div class="metric-icon">☑</div>
+                <div><p>Bundle</p><strong>95%</strong><span>Trend naik</span></div>
+              </article>
+              <article class="metric-card metric-red">
+                <div class="metric-icon">✹</div>
+                <div><p>HAI</p><strong>3 Kasus</strong><span>Perlu evaluasi</span></div>
+              </article>
+              <article class="metric-card metric-blue">
+                <div class="metric-icon">✦</div>
+                <div><p>RTL Open</p><strong>12</strong><span>3 mendekati tenggat</span></div>
+              </article>
+            </div>
+          </article>
+
+          <article class="panel panel-span-2">
+            <div class="panel-header"><h3>Ringkasan Unit</h3></div>
+            <div class="task-list">
+              <div class="task-item"><span>ICU</span><strong>Skor 90</strong></div>
+              <div class="task-item"><span>IGD</span><strong>Skor 84</strong></div>
+              <div class="task-item"><span>Rawat Inap</span><strong>Skor 82</strong></div>
+              <div class="task-item"><span>Kamar Operasi</span><strong>Skor 88</strong></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header"><h3>Status Laporan</h3></div>
+            <ul class="notify-list">
+              <li>Draft: sudah siap</li>
+              <li>Review komite: menunggu</li>
+              <li>Kirim manajemen: dijadwalkan</li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

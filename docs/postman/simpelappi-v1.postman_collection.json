@@ -1,0 +1,196 @@
+{
+  "info": {
+    "name": "SIMPELAPPI API v1",
+    "_postman_id": "f8d334c7-cd90-47d1-b98f-ef84cf4d95a2",
+    "description": "Postman collection derived from SIMPELAPPI OpenAPI draft.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"ipcn_admin\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Monitoring",
+      "item": [
+        {
+          "name": "Create Monitoring",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monitoringDate\": \"2026-08-01\",\n  \"unitId\": \"11111111-1111-1111-1111-111111111111\",\n  \"observerUserId\": \"22222222-2222-2222-2222-222222222223\",\n  \"items\": [\n    {\n      \"questionCode\": \"HH-01\",\n      \"answerValue\": \"yes\",\n      \"scoreValue\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/monitoring",
+              "host": ["{{baseUrl}}"],
+              "path": ["monitoring"]
+            }
+          }
+        },
+        {
+          "name": "Submit Monitoring",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"submittedBy\": \"22222222-2222-2222-2222-222222222223\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/monitoring/{{monitoringId}}/submit",
+              "host": ["{{baseUrl}}"],
+              "path": ["monitoring", "{{monitoringId}}", "submit"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Audit",
+      "item": [
+        {
+          "name": "Create Audit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"auditDate\": \"2026-08-01\",\n  \"unitId\": \"11111111-1111-1111-1111-111111111111\",\n  \"auditorUserId\": \"22222222-2222-2222-2222-222222222223\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/audit",
+              "host": ["{{baseUrl}}"],
+              "path": ["audit"]
+            }
+          }
+        },
+        {
+          "name": "Approve Audit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"approverUserId\": \"22222222-2222-2222-2222-222222222222\",\n  \"approvalStatus\": \"approved\",\n  \"approvalNote\": \"Lanjutkan RTL\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/audit/{{auditId}}/approval",
+              "host": ["{{baseUrl}}"],
+              "path": ["audit", "{{auditId}}", "approval"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "RTL",
+      "item": [
+        {
+          "name": "Create RTL",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sourceType\": \"audit\",\n  \"sourceId\": \"{{auditId}}\",\n  \"rtlTitle\": \"Peningkatan kepatuhan hand hygiene\",\n  \"picUserId\": \"22222222-2222-2222-2222-222222222225\",\n  \"unitId\": \"11111111-1111-1111-1111-111111111111\",\n  \"dueDate\": \"2026-08-10\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rtl",
+              "host": ["{{baseUrl}}"],
+              "path": ["rtl"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Surveilans",
+      "item": [
+        {
+          "name": "Create Case",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mrn\": \"MRN-20481\",\n  \"fullName\": \"Ayu Lestari\",\n  \"unitId\": \"11111111-1111-1111-1111-111111111111\",\n  \"diagnosisText\": \"Pneumonia nosokomial\",\n  \"haiTypeCode\": \"VAP\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/surveilans/cases",
+              "host": ["{{baseUrl}}"],
+              "path": ["surveilans", "cases"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notification",
+      "item": [
+        {
+          "name": "List Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications?page=1&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api/v1" },
+    { "key": "accessToken", "value": "" },
+    { "key": "monitoringId", "value": "33333333-3333-3333-3333-333333333331" },
+    { "key": "auditId", "value": "" }
+  ]
+}

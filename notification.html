@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPELAPPI — Notification Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="shell.js" defer></script>
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <div class="brand-block">
+          <div class="brand-crest" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-organization">Kemenkes</p>
+            <h1>RS Mata Cicendo</h1>
+          </div>
+        </div>
+
+        <nav class="side-menu" aria-label="Menu utama">
+          <a class="side-menu-item" href="index.html"><span class="side-menu-icon">⌂</span><span>Dashboard</span></a>
+          <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◌</span><span>Kewaspadaan Isolasi</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">▣</span><span>Bundles HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="rtl.html"><span class="side-menu-icon">✦</span><span>PPRA / RTL</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="notification.html"><span class="side-menu-icon">☍</span><span>Logbook IPCN</span></a>
+          <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☌</span><span>Laporan</span></a>
+          <a class="side-menu-item" href="admin.html"><span class="side-menu-icon">⚙</span><span>Pengaturan</span></a>
+        </nav>
+      </aside>
+
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div class="brand-banner">
+            <h2>SIMPELAPPI</h2>
+            <p>Sistem Informasi Monitoring, Pelaporan, Audit Pencegahan dan Pengendalian Infeksi</p>
+          </div>
+
+          <div class="topbar-tools">
+            <button class="icon-pill" type="button" aria-label="Notifikasi">
+              <span>🔔</span>
+              <strong>12</strong>
+            </button>
+            <button class="icon-pill" type="button" aria-label="Kalender">
+              <span>📅</span>
+            </button>
+            <div class="user-chip">
+              <div class="user-avatar">I</div>
+              <div>
+                <strong>IPCN Utama</strong>
+                <span>IPCN</span>
+              </div>
+              <span class="side-menu-caret">⌄</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="workspace-head">
+          <div>
+            <p class="eyebrow">Notification Center</p>
+            <h3>12 Notifikasi Aktif</h3>
+            <p class="workspace-subtitle">Pantau alert audit, surveilans, dan tindak lanjut prioritas</p>
+          </div>
+
+          <div class="workspace-filters">
+            <label class="filter-chip">
+              <span>▾</span>
+              <select aria-label="Kategori notifikasi">
+                <option>Semua Kategori</option>
+                <option>Audit</option>
+                <option>RTL</option>
+                <option>Surveilans</option>
+              </select>
+            </label>
+            <label class="filter-chip">
+              <span>▾</span>
+              <select aria-label="Status baca notifikasi">
+                <option>Belum Dibaca</option>
+                <option>Semua</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section class="dashboard-grid notification-board">
+          <article class="panel panel-span-2">
+            <div class="panel-header"><h3>Prioritas Tinggi</h3><span class="pill danger">3</span></div>
+            <div class="notification-stack">
+              <div class="notice-item danger"><strong>Audit Hand Hygiene IGD</strong><span>Belum diisi hari ini</span><small>10 menit yang lalu</small></div>
+              <div class="notice-item warning"><strong>Bundle IDO OK belum lengkap</strong><span>IDO - 3 pasien</span><small>1 jam yang lalu</small></div>
+              <div class="notice-item danger"><strong>HAI baru terdeteksi</strong><span>1 kasus CAUTI di ICU</span><small>2 jam yang lalu</small></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header"><h3>Ringkasan</h3></div>
+            <div class="task-list">
+              <div class="task-item"><span>Audit Pending</span><strong>3</strong></div>
+              <div class="task-item"><span>RTL H-3</span><strong>5</strong></div>
+              <div class="task-item"><span>Kasus HAI Baru</span><strong>1</strong></div>
+              <div class="task-item"><span>Training Reminder</span><strong>3</strong></div>
+            </div>
+          </article>
+
+          <article class="panel panel-span-2">
+            <div class="panel-header"><h3>Notifikasi Lainnya</h3></div>
+            <div class="notification-stack">
+              <div class="notice-item info"><strong>Surveilans belum divalidasi</strong><span>5 kasus menunggu validasi</span><small>3 jam yang lalu</small></div>
+              <div class="notice-item success"><strong>Pelatihan PPI dasar</strong><span>Jadwal 25 Juni 2026</span><small>1 hari yang lalu</small></div>
+              <div class="notice-item info"><strong>Laporan bulanan siap</strong><span>Silakan review sebelum kirim</span><small>1 hari yang lalu</small></div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
