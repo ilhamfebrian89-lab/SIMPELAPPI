@@ -178,6 +178,25 @@
               </fieldset>
 
               <fieldset class="form-section">
+                <legend>Foto Temuan (opsional)</legend>
+                <div class="finding-photo-toolbar">
+                  <span id="findingPhotoCount">0 foto</span>
+                  <div class="finding-photo-actions">
+                    <label class="btn btn-secondary finding-photo-button">
+                      Kamera
+                      <input id="findingPhotoCamera" type="file" accept="image/*" capture="environment" hidden />
+                    </label>
+                    <label class="btn btn-secondary finding-photo-button">
+                      Unggah
+                      <input id="findingPhotoUpload" type="file" accept="image/*" multiple hidden />
+                    </label>
+                  </div>
+                </div>
+                <div class="finding-photo-grid" id="findingPhotoPreview" aria-live="polite"></div>
+                <p class="finding-photo-note">Ambil foto langsung dari kamera (HP) atau unggah dari galeri. Foto dikompres otomatis dan tersimpan bersama observasi.</p>
+              </fieldset>
+
+              <fieldset class="form-section">
                 <legend>Tanda Tangan Digital Auditor</legend>
                 <div class="signature-grid">
                   <div class="signature-pad-wrap">

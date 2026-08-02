@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const signatureLocationDate = document.getElementById('signatureLocationDate');
   const signatureNameInput = document.getElementById('signatureAuditorName');
   const signatureCanvas = document.getElementById('auditorSignature');
+  const findingPhotoCamera = document.getElementById('findingPhotoCamera');
+  const findingPhotoUpload = document.getElementById('findingPhotoUpload');
+  const findingPhotoCount = document.getElementById('findingPhotoCount');
+  const findingPhotoPreview = document.getElementById('findingPhotoPreview');
   const clearSignatureButton = document.getElementById('clearSignatureButton');
   const saveDraftButton = document.getElementById('saveIsolationDraftButton');
   const resetButton = document.getElementById('resetIsolationFormButton');
@@ -39,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
     !signatureLocationDate ||
     !signatureNameInput ||
     !(signatureCanvas instanceof HTMLCanvasElement) ||
+    !(findingPhotoCamera instanceof HTMLInputElement) ||
+    !(findingPhotoUpload instanceof HTMLInputElement) ||
+    !findingPhotoCount ||
+    !findingPhotoPreview ||
     !clearSignatureButton ||
     !saveDraftButton ||
     !resetButton ||
@@ -59,6 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'audit';
   let isDrawing = false;
   let hasSignature = false;
+  let findingPhotos = [];
+  let photoGeneration = 0;
+  const pendingPhotoBatches = new Set();
 
   function getLocalDate() {
     const now = new Date();
@@ -112,6 +123,111 @@ document.addEventListener('DOMContentLoaded', () => {
     signatureContext.lineCap = 'round';
     signatureContext.lineJoin = 'round';
     hasSignature = false;
+  }
+
+  function renderFindingPhotos() {
+    findingPhotoCount.textContent = `${findingPhotos.length} foto`;
+    findingPhotoPreview.replaceChildren();
+
+    findingPhotos.forEach((photo, index) => {
+      const thumbnail = document.createElement('div');
+      const image = document.createElement('img');
+      const removeButton = document.createElement('button');
+
+      thumbnail.className = 'finding-photo-thumbnail';
+      image.src = photo;
+      image.alt = `Foto temuan ${index + 1}`;
+      removeButton.className = 'finding-photo-remove';
+      removeButton.type = 'button';
+      removeButton.textContent = '\u00d7';
+      removeButton.setAttribute('aria-label', `Hapus foto temuan ${index + 1}`);
+      removeButton.addEventListener('click', () => {
+        findingPhotos.splice(index, 1);
+        renderFindingPhotos();
+      });
+
+      thumbnail.append(image, removeButton);
+      findingPhotoPreview.appendChild(thumbnail);
+    });
+  }
+
+  function readPhoto(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        if (typeof reader.result !== 'string') {
+          reject(new Error(`Foto ${file.name} tidak dapat dibaca.`));
+          return;
+        }
+        resolve(reader.result);
+      });
+      reader.addEventListener('error', () => reject(new Error(`Foto ${file.name} tidak dapat dibaca.`)));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function loadPhoto(dataUrl, fileName) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.addEventListener('load', () => resolve(image));
+      image.addEventListener('error', () => reject(new Error(`Foto ${fileName} tidak dapat diproses.`)));
+      image.src = dataUrl;
+    });
+  }
+
+  async function compressPhoto(file) {
+    const dataUrl = await readPhoto(file);
+    const image = await loadPhoto(dataUrl, file.name);
+    const maxDimension = 1000;
+    const ratio = Math.min(1, maxDimension / Math.max(image.width, image.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(image.width * ratio));
+    canvas.height = Math.max(1, Math.round(image.height * ratio));
+    const context = canvas.getContext('2d');
+    if (!context) {
+      throw new Error(`Foto ${file.name} tidak dapat dikompres.`);
+    }
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', 0.6);
+  }
+
+  async function handleFindingPhotoInput(input) {
+    const selectedFiles = Array.from(input.files ?? []);
+    input.value = '';
+    if (selectedFiles.length === 0) return;
+
+    const imageFiles = selectedFiles.filter((file) => file.type.startsWith('image/'));
+    if (imageFiles.length !== selectedFiles.length) {
+      showAlert('Sebagian file diabaikan karena bukan format gambar.', 'alert-error');
+    }
+    if (imageFiles.length === 0) return;
+
+    const batchToken = Symbol('finding-photo-batch');
+    const generation = photoGeneration;
+    pendingPhotoBatches.add(batchToken);
+    showAlert('Foto temuan sedang dikompres.', 'alert-info');
+
+    try {
+      const results = await Promise.allSettled(imageFiles.map(compressPhoto));
+      if (generation !== photoGeneration) return;
+
+      const compressedPhotos = results
+        .filter((result) => result.status === 'fulfilled')
+        .map((result) => result.value);
+      const failures = results.filter((result) => result.status === 'rejected');
+
+      findingPhotos.push(...compressedPhotos);
+      renderFindingPhotos();
+
+      if (failures.length > 0) {
+        failures.forEach((failure) => console.error('Foto temuan gagal diproses.', failure.reason));
+        showAlert(`${failures.length} foto gagal diproses.`, 'alert-error');
+        return;
+      }
+      showAlert(`${compressedPhotos.length} foto temuan berhasil ditambahkan.`, 'alert-success');
+    } finally {
+      pendingPhotoBatches.delete(batchToken);
+    }
   }
 
   function getPointerPosition(event) {
@@ -178,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
       findings: form.elements.findings.value.trim(),
       followUp: form.elements.followUp.value.trim(),
       recommendation: form.elements.recommendation.value.trim(),
+      photos: findingPhotos.slice(),
       signatureName: signatureNameInput.value.trim(),
       signature: hasSignature ? signatureCanvas.toDataURL('image/png') : '',
       score: calculateScore(),
@@ -194,6 +311,8 @@ document.addEventListener('DOMContentLoaded', () => {
     form.elements.findings.value = payload.findings ?? '';
     form.elements.followUp.value = payload.followUp ?? '';
     form.elements.recommendation.value = payload.recommendation ?? '';
+    findingPhotos = Array.isArray(payload.photos) ? payload.photos.filter((photo) => typeof photo === 'string') : [];
+    renderFindingPhotos();
     signatureNameInput.value = payload.auditor ?? '';
 
     if (Array.isArray(payload.assessments)) {
@@ -236,6 +355,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function saveDraft() {
+    if (pendingPhotoBatches.size > 0) {
+      showAlert('Tunggu hingga kompresi foto selesai sebelum menyimpan draft.', 'alert-info');
+      return;
+    }
     const payload = collectPayload();
     try {
       localStorage.setItem(getDraftKey(), JSON.stringify(payload));
@@ -312,7 +435,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const score = document.createElement('small');
       title.textContent = `${entry.mode === 'audit' ? 'Audit' : 'Supervisi'} - ${entry.categoryName}`;
       detail.textContent = `${entry.unit} | ${entry.assessmentDate}`;
-      score.textContent = `${entry.auditor} - Skor ${entry.score}`;
+      const photoSummary = Array.isArray(entry.photos) && entry.photos.length > 0 ? ` - ${entry.photos.length} foto` : '';
+      score.textContent = `${entry.auditor} - Skor ${entry.score}${photoSummary}`;
       item.append(title, detail, score);
       historyList.appendChild(item);
     });
@@ -324,6 +448,10 @@ document.addEventListener('DOMContentLoaded', () => {
     categorySelect.value = selectedCategory || isolationCategories[0].id;
     dateInput.value = getLocalDate();
     updateSignatureDate();
+    photoGeneration += 1;
+    pendingPhotoBatches.clear();
+    findingPhotos = [];
+    renderFindingPhotos();
     clearSignature();
     renderAssessmentItems();
     clearErrors();
@@ -380,6 +508,12 @@ document.addEventListener('DOMContentLoaded', () => {
     signatureNameInput.value = auditorInput.value;
   });
   dateInput.addEventListener('change', updateSignatureDate);
+  findingPhotoCamera.addEventListener('change', () => {
+    void handleFindingPhotoInput(findingPhotoCamera);
+  });
+  findingPhotoUpload.addEventListener('change', () => {
+    void handleFindingPhotoInput(findingPhotoUpload);
+  });
   categorySelect.addEventListener('change', () => {
     resetForm({ keepAlert: true });
     loadDraft();
@@ -409,6 +543,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
+    if (pendingPhotoBatches.size > 0) {
+      showAlert('Tunggu hingga kompresi foto selesai sebelum submit formulir.', 'alert-info');
+      return;
+    }
     const payload = collectPayload();
     if (!validatePayload(payload)) {
       showAlert('Formulir belum lengkap. Periksa field yang ditandai.', 'alert-error');
@@ -436,6 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
   clearSignature();
   dateInput.value = getLocalDate();
   updateSignatureDate();
+  renderFindingPhotos();
   renderAssessmentItems();
   loadDraft();
   renderHistory();

@@ -73,6 +73,9 @@ Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="isolationAssessmentFo
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="auditorSignature"' -Description 'digital signature canvas'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="signatureLocationDate"' -Description 'signature location and date'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="signatureAuditorName".*readonly' -Description 'automatic read-only auditor signature name'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="findingPhotoCamera".*capture="environment"' -Description 'finding photo camera input'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="findingPhotoUpload".*multiple' -Description 'finding photo upload input'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="findingPhotoCount">0 foto' -Description 'finding photo counter'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Instalasi Gawat Darurat</option>' -Description 'first hospital unit'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Bank Mata</option>' -Description 'final hospital unit'
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'window\.simpelappiIsolationCategories' -Description 'isolation category configuration'
@@ -82,6 +85,8 @@ Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'Transportasi Limba
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureCanvas\.toDataURL' -Description 'digital signature capture'
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureLocationDate\.textContent = `Bandung, \$\{formattedDate\}`' -Description 'dynamic Bandung signature date'
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureNameInput\.value = auditorInput\.value' -Description 'automatic auditor signature name'
+Assert-Contains -PathToCheck $monitoringJs -Pattern "canvas\.toDataURL\('image/jpeg', 0\.6\)" -Description 'automatic finding photo compression'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'photos: findingPhotos\.slice\(\)' -Description 'finding photos persisted with observation'
 
 Assert-Contains -PathToCheck $stylesCss -Pattern '\.autosave-activity\.is-active::after' -Description 'autosave animation'
 Assert-Contains -PathToCheck $stylesCss -Pattern 'prefers-reduced-motion: reduce' -Description 'reduced motion support'
