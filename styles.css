@@ -1693,6 +1693,13 @@ textarea {
   font-size: 0.76rem;
 }
 
+.signature-pad-wrap .signature-location-date {
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: right;
+}
+
 .signature-pad {
   width: 100%;
   height: 180px;

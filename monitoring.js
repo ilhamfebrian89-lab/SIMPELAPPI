@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const historyList = document.getElementById('isolationHistory');
   const auditorInput = document.getElementById('isolationAuditor');
   const dateInput = document.getElementById('isolationDate');
+  const signatureLocationDate = document.getElementById('signatureLocationDate');
   const signatureNameInput = document.getElementById('signatureAuditorName');
   const signatureCanvas = document.getElementById('auditorSignature');
   const clearSignatureButton = document.getElementById('clearSignatureButton');
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     !historyList ||
     !auditorInput ||
     !dateInput ||
+    !signatureLocationDate ||
     !signatureNameInput ||
     !(signatureCanvas instanceof HTMLCanvasElement) ||
     !clearSignatureButton ||
@@ -63,6 +65,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     return now.toISOString().slice(0, 10);
+  }
+
+  function updateSignatureDate() {
+    const [year, month, day] = dateInput.value.split('-').map(Number);
+    if (!year || !month || !day) {
+      signatureLocationDate.textContent = 'Bandung, tanggal belum dipilih';
+      return;
+    }
+
+    const assessmentDate = new Date(year, month - 1, day);
+    const formattedDate = new Intl.DateTimeFormat('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }).format(assessmentDate);
+    signatureLocationDate.textContent = `Bandung, ${formattedDate}`;
   }
 
   function showAlert(message, type) {
@@ -171,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyPayload(payload) {
     auditorInput.value = payload.auditor ?? '';
     dateInput.value = payload.assessmentDate ?? '';
+    updateSignatureDate();
     form.elements.unit.value = payload.unit ?? '';
     form.elements.analysis.value = payload.analysis ?? '';
     form.elements.findings.value = payload.findings ?? '';
@@ -306,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.reset();
     categorySelect.value = selectedCategory || isolationCategories[0].id;
     dateInput.value = getLocalDate();
+    updateSignatureDate();
     signatureNameTouched = false;
     clearSignature();
     renderAssessmentItems();
@@ -367,6 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
   signatureNameInput.addEventListener('input', () => {
     signatureNameTouched = true;
   });
+  dateInput.addEventListener('change', updateSignatureDate);
   categorySelect.addEventListener('change', () => {
     resetForm({ keepAlert: true });
     loadDraft();
@@ -422,6 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   clearSignature();
   dateInput.value = getLocalDate();
+  updateSignatureDate();
   renderAssessmentItems();
   loadDraft();
   renderHistory();

@@ -71,6 +71,7 @@ Assert-Contains -PathToCheck $monitoringHtml -Pattern '<script src="monitoring\.
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<script src="isolation-categories\.js" defer></script>' -Description 'isolation category configuration script'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="isolationAssessmentForm"' -Description 'isolation assessment form'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="auditorSignature"' -Description 'digital signature canvas'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="signatureLocationDate"' -Description 'signature location and date'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Instalasi Gawat Darurat</option>' -Description 'first hospital unit'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Bank Mata</option>' -Description 'final hospital unit'
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'window\.simpelappiIsolationCategories' -Description 'isolation category configuration'
@@ -78,6 +79,7 @@ Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'parsedIsolationCat
 Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'isolationAssessmentItemCount !== 284' -Description '284 assessment item integrity check'
 Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'Transportasi Limbah Medis ke Pihak Ketiga' -Description 'final isolation category'
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureCanvas\.toDataURL' -Description 'digital signature capture'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureLocationDate\.textContent = `Bandung, \$\{formattedDate\}`' -Description 'dynamic Bandung signature date'
 
 Assert-Contains -PathToCheck $stylesCss -Pattern '\.autosave-activity\.is-active::after' -Description 'autosave animation'
 Assert-Contains -PathToCheck $stylesCss -Pattern 'prefers-reduced-motion: reduce' -Description 'reduced motion support'
