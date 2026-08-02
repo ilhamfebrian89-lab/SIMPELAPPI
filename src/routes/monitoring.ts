@@ -12,7 +12,7 @@ export const monitoringRoutes: FastifyPluginAsyncTypebox = async (app) => {
   app.post(
     '/',
     {
-      preHandler: [app.authenticate, app.authorize(['monitoring:write'])],
+      preHandler: [app.authenticate, app.authorize(['monitoring:write', 'monitoring:write:own-unit'])],
       schema: {
         body: Type.Object({
           monitoringDate: date,
@@ -97,7 +97,7 @@ export const monitoringRoutes: FastifyPluginAsyncTypebox = async (app) => {
   app.post(
     '/:monitoringId/submit',
     {
-      preHandler: [app.authenticate, app.authorize(['monitoring:write'])],
+      preHandler: [app.authenticate, app.authorize(['monitoring:write', 'monitoring:write:own-unit'])],
       schema: {
         params: Type.Object({ monitoringId: uuid }),
         body: Type.Object({ submittedBy: uuid })

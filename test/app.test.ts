@@ -113,4 +113,33 @@ describe('SIMPELAPPI API', () => {
     expect(response.statusCode).toBe(403);
     expect(response.json().errors[0].code).toBe('AUTH-403');
   });
+
+  it('blocks IPCLN monitoring writes for another unit', async () => {
+    app = await buildApp({ config, logger: false });
+    const token = app.jwt.sign({
+      sub: '22222222-2222-2222-2222-222222222224',
+      role_code: 'IPCLN',
+      unit_id: '11111111-1111-1111-1111-111111111111',
+      scope: ['monitoring:write:own-unit'],
+      token_version: 0,
+      token_type: 'access'
+    });
+    const response = await app.inject({
+      method: 'POST',
+      url: '/api/v1/monitoring',
+      headers: { authorization: `Bearer ${token}` },
+      payload: {
+        monitoringDate: '2026-08-01',
+        unitId: '11111111-1111-1111-1111-111111111112',
+        observerUserId: '22222222-2222-2222-2222-222222222224',
+        items: [{ questionCode: 'HH-01', answerValue: 'yes', scoreValue: 1 }]
+      }
+    });
+
+    expect(response.statusCode).toBe(403);
+    expect(response.json().errors[0]).toMatchObject({
+      code: 'AUTH-403',
+      detail: 'Access to data from this unit is not permitted.'
+    });
+  });
 });
