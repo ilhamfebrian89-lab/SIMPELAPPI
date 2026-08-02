@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const signatureImage =
       payload.signature && /^data:image\//.test(payload.signature)
         ? `<img class="signature-image" src="${escapeReportHtml(payload.signature)}" alt="Tanda tangan digital auditor">`
-        : '<div class="signature-placeholder">(.........................)</div>';
+        : '<div class="signature-placeholder"></div>';
 
     return {
       filename,
@@ -508,8 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </section>
 
             <footer class="report-footer">
-              <strong>SIMPELAPPI</strong><br>
-              Sistem Informasi Manajemen Pencegahan dan Pengendalian Infeksi
+              <strong>SIMPELAPPI</strong>
             </footer>
           </body>
         </html>`
