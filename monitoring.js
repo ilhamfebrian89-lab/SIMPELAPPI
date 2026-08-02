@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const findingPhotoPreview = document.getElementById('findingPhotoPreview');
   const clearSignatureButton = document.getElementById('clearSignatureButton');
   const saveDraftButton = document.getElementById('saveIsolationDraftButton');
+  const savePdfButton = document.getElementById('saveIsolationPdfButton');
   const resetButton = document.getElementById('resetIsolationFormButton');
   const modeTabs = Array.from(document.querySelectorAll('[data-form-mode]'));
   const modeEyebrow = document.getElementById('formModeEyebrow');
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     !findingPhotoPreview ||
     !clearSignatureButton ||
     !saveDraftButton ||
+    !savePdfButton ||
     !resetButton ||
     !modeEyebrow ||
     !modeTitle
@@ -275,6 +277,276 @@ document.addEventListener('DOMContentLoaded', () => {
       select.addEventListener('change', calculateScore);
     });
     calculateScore();
+  }
+
+  function escapeReportHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function formatReportDate(value, padDay = false) {
+    const [year, month, day] = String(value ?? '')
+      .split('-')
+      .map(Number);
+    if (!year || !month || !day) return '';
+
+    const monthName = new Intl.DateTimeFormat('id-ID', { month: 'long' }).format(new Date(year, month - 1, day));
+    return `${padDay ? String(day).padStart(2, '0') : day} ${monthName} ${year}`;
+  }
+
+  function toFilenamePart(value) {
+    return String(value ?? '')
+      .trim()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\p{L}\p{N}]+/gu, '_')
+      .replace(/^_+|_+$/g, '');
+  }
+
+  function getAssessmentResultLabel(score) {
+    return (
+      {
+        2: 'Ya',
+        1: 'Sebagian',
+        0: 'Tidak',
+        na: 'Tidak Berlaku'
+      }[score] ?? 'Belum diisi'
+    );
+  }
+
+  function buildPrintReport(payload) {
+    const modeLabel = currentMode === 'supervisi' ? 'Supervisi' : 'Audit';
+    const categoryName = payload.categoryName || 'Jenis belum dipilih';
+    const reportDate = formatReportDate(payload.assessmentDate) || 'Tanggal belum diisi';
+    const filenameDate = formatReportDate(payload.assessmentDate, true) || 'Tanggal_Belum_Diisi';
+    const filenameBase = `${modeLabel}_${toFilenamePart(categoryName) || 'Jenis_Belum_Dipilih'}_${filenameDate}`;
+    const filename = `${filenameBase}.pdf`;
+    const logoUrl = new URL('assets/kemenkes-rs-cicendo.svg', window.location.href).href;
+    const assessmentRows = payload.assessments
+      .map(
+        (assessment, index) => `
+          <tr>
+            <td class="number">${index + 1}</td>
+            <td>${escapeReportHtml(assessment.item)}</td>
+            <td class="result">${escapeReportHtml(getAssessmentResultLabel(assessment.score))}</td>
+          </tr>
+        `
+      )
+      .join('');
+    const comments = payload.assessments.filter((assessment) => assessment.note);
+    const commentSection =
+      comments.length > 0
+        ? `
+          <section class="report-section">
+            <h2>Catatan Item Penilaian</h2>
+            <ol class="comment-list">
+              ${comments
+                .map(
+                  (assessment) => `
+                    <li>
+                      <strong>${escapeReportHtml(assessment.item)}</strong>
+                      <p>${escapeReportHtml(assessment.note)}</p>
+                    </li>
+                  `
+                )
+                .join('')}
+            </ol>
+          </section>
+        `
+        : '';
+    const yesCount = payload.assessments.filter((assessment) => assessment.score === '2').length;
+    const noCount = payload.assessments.filter((assessment) => assessment.score === '0').length;
+    const printablePhotos = payload.photos.filter((photo) => /^data:image\//.test(photo));
+    const photoSection =
+      printablePhotos.length > 0
+        ? `
+          <section class="report-section photo-section">
+            <h2>Foto Temuan</h2>
+            <div class="report-photo-grid">
+              ${printablePhotos
+                .map(
+                  (photo, index) =>
+                    `<figure><img src="${escapeReportHtml(photo)}" alt="Foto temuan ${index + 1}"><figcaption>Foto ${index + 1}</figcaption></figure>`
+                )
+                .join('')}
+            </div>
+          </section>
+        `
+        : '';
+    const signatureImage =
+      payload.signature && /^data:image\//.test(payload.signature)
+        ? `<img class="signature-image" src="${escapeReportHtml(payload.signature)}" alt="Tanda tangan digital auditor">`
+        : '<div class="signature-placeholder">(.........................)</div>';
+
+    return {
+      filename,
+      html: `<!doctype html>
+        <html lang="id">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${escapeReportHtml(filenameBase)}</title>
+            <style>
+              @page { size: 210mm 330mm portrait; margin: 14mm 14mm 20mm; }
+              * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+              html, body { margin: 0; padding: 0; color: #172033; font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; line-height: 1.45; }
+              body { padding-bottom: 16mm; }
+              .report-header { display: grid; grid-template-columns: 30mm 1fr; align-items: center; gap: 7mm; margin-bottom: 6mm; padding: 5mm 6mm; border-radius: 4mm; background: linear-gradient(135deg, #064e3b, #0f766e); color: #fff; }
+              .report-header img { width: 28mm; max-height: 22mm; padding: 2mm; border-radius: 2mm; background: #fff; object-fit: contain; }
+              .hospital-name { margin: 0; font-size: 15pt; font-weight: 800; letter-spacing: .02em; line-height: 1.2; }
+              .hospital-subtitle { margin: 1mm 0 0; font-size: 11pt; font-weight: 700; }
+              .committee { margin: 2mm 0 0; font-size: 9.5pt; }
+              .report-title { margin: 0 0 5mm; padding-bottom: 3mm; border-bottom: 1.2pt solid #0f766e; color: #064e3b; font-size: 17pt; font-weight: 800; text-align: center; text-transform: uppercase; }
+              .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 8mm; margin-bottom: 6mm; padding: 4mm 5mm; border: 1pt solid #cbd5e1; border-radius: 2mm; background: #f8fafc; }
+              .info-row { display: grid; grid-template-columns: 39mm 1fr; gap: 2mm; padding: 1.2mm 0; border-bottom: .5pt solid #e2e8f0; }
+              .info-row:nth-last-child(-n+2) { border-bottom: 0; }
+              .info-label { color: #475569; font-weight: 700; }
+              .info-value { overflow-wrap: anywhere; }
+              .report-section { margin-top: 6mm; break-inside: avoid-page; }
+              .report-section h2 { margin: 0 0 2.5mm; color: #064e3b; font-size: 12pt; }
+              table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+              thead { display: table-header-group; }
+              tr { break-inside: avoid; page-break-inside: avoid; }
+              th, td { padding: 2.5mm 2.8mm; border: .75pt solid #64748b; vertical-align: top; }
+              th { background: #e2e8f0; color: #1e293b; font-weight: 800; text-align: left; }
+              th.number, td.number { width: 12mm; text-align: center; }
+              th.result, td.result { width: 31mm; text-align: center; }
+              .comment-list { margin: 0; padding-left: 6mm; }
+              .comment-list li { margin-bottom: 2.5mm; break-inside: avoid; }
+              .comment-list p { margin: .5mm 0 0; white-space: pre-wrap; }
+              .narrative-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+              .narrative-box { min-height: 22mm; padding: 3mm; border: .75pt solid #94a3b8; border-radius: 2mm; break-inside: avoid; }
+              .narrative-box h3 { margin: 0 0 1.5mm; font-size: 10.5pt; }
+              .narrative-box p { margin: 0; white-space: pre-wrap; }
+              .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: .75pt solid #64748b; }
+              .score-item { padding: 3mm; border-right: .75pt solid #64748b; text-align: center; }
+              .score-item:last-child { border-right: 0; }
+              .score-item span { display: block; color: #475569; font-size: 9pt; }
+              .score-item strong { display: block; margin-top: 1mm; color: #064e3b; font-size: 14pt; }
+              .score-note { margin: 1.5mm 0 0; color: #64748b; font-size: 8.5pt; }
+              .report-photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+              .report-photo-grid figure { margin: 0; break-inside: avoid; }
+              .report-photo-grid img { display: block; width: 100%; height: 43mm; border: .75pt solid #94a3b8; border-radius: 2mm; object-fit: cover; }
+              .report-photo-grid figcaption { margin-top: 1mm; color: #64748b; font-size: 8.5pt; text-align: center; }
+              .signature-section { display: flex; justify-content: flex-end; margin-top: 10mm; break-inside: avoid; page-break-inside: avoid; }
+              .signature-card { width: 68mm; text-align: center; }
+              .signature-card p { margin: 0 0 2mm; }
+              .signature-image { display: block; width: 58mm; height: 27mm; margin: 0 auto 2mm; object-fit: contain; }
+              .signature-placeholder { display: grid; place-items: end center; height: 27mm; margin-bottom: 2mm; }
+              .signature-name { padding-top: 1.5mm; border-top: .75pt solid #334155; font-weight: 700; }
+              .report-footer { position: fixed; right: 0; bottom: -13mm; left: 0; padding-top: 2mm; border-top: .75pt solid #94a3b8; color: #64748b; font-size: 8.5pt; text-align: center; }
+              @media screen {
+                body { max-width: 210mm; min-height: 330mm; margin: 12mm auto; padding: 14mm 14mm 25mm; box-shadow: 0 8px 30px rgba(15, 23, 42, .16); }
+                .report-footer { right: 14mm; bottom: 7mm; left: 14mm; }
+              }
+            </style>
+          </head>
+          <body>
+            <header class="report-header">
+              <img src="${escapeReportHtml(logoUrl)}" alt="Logo Rumah Sakit Mata Cicendo">
+              <div>
+                <p class="hospital-name">PUSAT MATA NASIONAL<br>RUMAH SAKIT MATA CICENDO BANDUNG</p>
+                <p class="committee">Komite Pencegahan dan Pengendalian Infeksi</p>
+              </div>
+            </header>
+
+            <h1 class="report-title">${escapeReportHtml(`${modeLabel} ${categoryName}`)}</h1>
+
+            <section class="info-grid">
+              <div class="info-row"><span class="info-label">Jenis ${escapeReportHtml(modeLabel)}</span><span class="info-value">${escapeReportHtml(categoryName)}</span></div>
+              <div class="info-row"><span class="info-label">Tanggal ${escapeReportHtml(modeLabel)}</span><span class="info-value">${escapeReportHtml(reportDate)}</span></div>
+              <div class="info-row"><span class="info-label">Unit</span><span class="info-value">${escapeReportHtml(payload.unit || '-')}</span></div>
+              <div class="info-row"><span class="info-label">Ruangan</span><span class="info-value">-</span></div>
+              <div class="info-row"><span class="info-label">Auditor</span><span class="info-value">${escapeReportHtml(payload.auditor || '-')}</span></div>
+              <div class="info-row"><span class="info-label">Petugas yang Diaudit</span><span class="info-value">-</span></div>
+              <div class="info-row"><span class="info-label">Profesi</span><span class="info-value">${escapeReportHtml(payload.profession || '-')}</span></div>
+            </section>
+
+            <section>
+              <table>
+                <thead><tr><th class="number">No</th><th>Item Penilaian</th><th class="result">Hasil</th></tr></thead>
+                <tbody>${assessmentRows}</tbody>
+              </table>
+            </section>
+
+            ${commentSection}
+
+            <section class="report-section">
+              <h2>Analisis dan Tindak Lanjut</h2>
+              <div class="narrative-grid">
+                <div class="narrative-box"><h3>Analisis</h3><p>${escapeReportHtml(payload.analysis || '-')}</p></div>
+                <div class="narrative-box"><h3>Temuan</h3><p>${escapeReportHtml(payload.findings || '-')}</p></div>
+                <div class="narrative-box"><h3>Rencana Tindak Lanjut</h3><p>${escapeReportHtml(payload.followUp || '-')}</p></div>
+                <div class="narrative-box"><h3>Rekomendasi</h3><p>${escapeReportHtml(payload.recommendation || '-')}</p></div>
+              </div>
+            </section>
+
+            <section class="report-section">
+              <h2>Nilai</h2>
+              <div class="score-grid">
+                <div class="score-item"><span>Jumlah Item</span><strong>${payload.assessments.length}</strong></div>
+                <div class="score-item"><span>Jumlah Ya</span><strong>${yesCount}</strong></div>
+                <div class="score-item"><span>Jumlah Tidak</span><strong>${noCount}</strong></div>
+                <div class="score-item"><span>Persentase Kepatuhan</span><strong>${payload.score}%</strong></div>
+              </div>
+              <p class="score-note">Nilai Sebagian dihitung 50%, sedangkan Tidak Berlaku tidak dimasukkan dalam persentase kepatuhan.</p>
+            </section>
+
+            ${photoSection}
+
+            <section class="signature-section">
+              <div class="signature-card">
+                <p>Bandung, ${escapeReportHtml(reportDate)}</p>
+                <p>Auditor</p>
+                ${signatureImage}
+                <p class="signature-name">${escapeReportHtml(payload.auditor || 'Nama Auditor')}</p>
+              </div>
+            </section>
+
+            <footer class="report-footer">
+              <strong>SIMPELAPPI</strong><br>
+              Sistem Informasi Manajemen Pencegahan dan Pengendalian Infeksi
+            </footer>
+          </body>
+        </html>`
+    };
+  }
+
+  function saveCurrentFormAsPdf() {
+    if (pendingPhotoBatches.size > 0) {
+      showAlert('Tunggu hingga kompresi foto selesai sebelum membuat PDF.', 'alert-info');
+      return;
+    }
+
+    const printWindow = window.open('', 'simpelappi-print-preview', 'width=1000,height=800');
+    if (!printWindow) {
+      showAlert('Print Preview diblokir browser. Izinkan pop-up untuk membuat PDF.', 'alert-error');
+      return;
+    }
+
+    const report = buildPrintReport(collectPayload());
+    printWindow.document.open();
+    printWindow.document.write(report.html);
+    printWindow.document.close();
+    printWindow.opener = null;
+
+    const images = Array.from(printWindow.document.images);
+    const imageReady = images.map((image) => {
+      if (image.complete) return Promise.resolve();
+      return new Promise((resolve) => {
+        image.addEventListener('load', resolve, { once: true });
+        image.addEventListener('error', resolve, { once: true });
+      });
+    });
+
+    void Promise.all(imageReady).then(() => {
+      printWindow.focus();
+      window.setTimeout(() => printWindow.print(), 250);
+    });
   }
 
   function collectPayload() {
@@ -523,6 +795,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   clearSignatureButton.addEventListener('click', clearSignature);
   saveDraftButton.addEventListener('click', saveDraft);
+  savePdfButton.addEventListener('click', saveCurrentFormAsPdf);
   resetButton.addEventListener('click', () => {
     if (window.confirm('Kosongkan seluruh isian formulir saat ini?')) {
       try {
