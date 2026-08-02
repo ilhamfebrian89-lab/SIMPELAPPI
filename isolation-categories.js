@@ -371,7 +371,7 @@ isolationCategorySource
 
     currentIsolationCategory = {
       id: `${categoryNumber}-${slug}`,
-      name: `${categoryNumber}. ${line}`,
+      name: line,
       description: `Checklist penilaian ${line}.`,
       items: []
     };
