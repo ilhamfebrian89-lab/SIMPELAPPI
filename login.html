@@ -16,22 +16,24 @@
         <h1>Enterprise Infection Prevention Management Platform</h1>
         <p>Monitoring, Audit, Surveilans, PPRA dan Education dalam satu ekosistem digital.</p>
       </section>
-      <section class="login-card card">
+      <form class="login-card card" id="login-form">
         <p class="eyebrow">Welcome Back</p>
         <h2>Masuk ke Sistem</h2>
         <div class="field-row">
           <label>Username</label>
-          <input type="text" title="Username" value="ipcn_admin" />
+          <input id="login-username" name="username" type="text" title="Username" autocomplete="username" required />
         </div>
         <div class="field-row">
           <label>Password</label>
-          <input type="password" title="Password" value="password123" />
+          <input id="login-password" name="password" type="password" title="Password" autocomplete="current-password" required />
         </div>
         <a class="text-link" href="index.html">Forgot password?</a>
         <div class="action-row">
-          <a class="btn btn-primary" href="index.html">Login</a>
+          <button class="btn btn-primary" type="submit">Login</button>
         </div>
-      </section>
+        <p class="form-status" id="login-status" role="status" aria-live="polite"></p>
+      </form>
     </div>
+    <script src="login.js"></script>
   </body>
 </html>

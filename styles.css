@@ -1624,6 +1624,42 @@ textarea {
   line-height: 1.5;
 }
 
+.surveillance-entry-panel {
+  margin-top: 20px;
+}
+
+.surveillance-entry-panel > .section-title {
+  margin-bottom: 16px;
+}
+
+.surveillance-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.surveillance-dynamic-section {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  background: #f8fbff;
+}
+
+.surveillance-dynamic-section[hidden] {
+  display: none;
+}
+
+.surveillance-dynamic-section .section-title {
+  margin-bottom: 12px;
+}
+
+.surveillance-dynamic-section h4 {
+  margin: 0;
+  color: #1e3a8a;
+  font-size: 0.95rem;
+}
+
 .isolation-field-grid,
 .isolation-text-grid {
   display: grid;
@@ -2168,6 +2204,7 @@ textarea {
 
   .isolation-field-grid,
   .isolation-text-grid,
+  .surveillance-form-grid,
   .signature-grid {
     grid-template-columns: 1fr;
   }

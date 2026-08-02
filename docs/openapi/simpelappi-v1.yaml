@@ -210,6 +210,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SurveillanceCaseCreatedResponse'
+  /surveilans/cases/{caseId}:
+    get:
+      tags: [Surveilans]
+      summary: Get complete surveillance case detail
+      parameters:
+        - in: path
+          name: caseId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Complete surveillance case
+    patch:
+      tags: [Surveilans]
+      summary: Update surveillance case data
+      parameters:
+        - in: path
+          name: caseId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSurveillanceCaseRequest'
+      responses:
+        '200':
+          description: Surveillance case updated
   /notifications:
     get:
       tags: [Notification]
@@ -593,21 +626,129 @@ components:
                   type: string
     CreateSurveillanceCaseRequest:
       type: object
-      required: [mrn, fullName, unitId, diagnosisText, haiTypeCode]
+      required: [mrn, fullName, unitId, diagnosisText]
       properties:
         mrn:
           type: string
         fullName:
           type: string
+        birthDate:
+          type: string
+          format: date
+        ageYears:
+          type: integer
+          minimum: 0
+          maximum: 150
+        sex:
+          type: string
+          enum: [male, female]
         unitId:
           type: string
           format: uuid
+        unitName:
+          type: string
+        roomName:
+          type: string
+        attendingPhysician:
+          type: string
+        admissionDate:
+          type: string
+          format: date
+        surveillanceStartDate:
+          type: string
+          format: date
+        surveillanceType:
+          type: string
+          enum: [hais, tuberculosis, hiv_aids, outbreak, other]
+        surveillanceSubtype:
+          type: string
+        diagnosisText:
+          type: string
+        haiTypeCode:
+          type: string
+          description: Backward-compatible alias for surveillanceSubtype when surveillanceType is hais.
+        organismName:
+          type: string
+        dynamicData:
+          type: object
+          description: Type-specific HAIs, TB, HIV/AIDS, outbreak, or other-infection fields.
+        clinicalData:
+          type: object
+          description: Clinical symptoms and risk factors.
+        supportingExaminations:
+          type: object
+          description: Laboratory, culture, radiology, and other examinations.
+        infectionControl:
+          type: object
+          description: Precautions, isolation, hand hygiene, PPE, and patient education.
+        reportingData:
+          type: object
+          description: PPI, PPRA, SKDR, health office, and contact-investigation reporting.
+        outcome:
+          type: string
+          enum: [hospitalized, discharged, referred, deceased]
+        verificationData:
+          type: object
+          description: IPCN verifier, verification date, conclusion, and notes.
+    UpdateSurveillanceCaseRequest:
+      type: object
+      description: Partial surveillance case update. Properties follow CreateSurveillanceCaseRequest and are all optional.
+      properties:
+        mrn:
+          type: string
+        fullName:
+          type: string
+        birthDate:
+          type: string
+          format: date
+        ageYears:
+          type: integer
+          minimum: 0
+          maximum: 150
+        sex:
+          type: string
+          enum: [male, female]
+        unitId:
+          type: string
+          format: uuid
+        unitName:
+          type: string
+        roomName:
+          type: string
+        attendingPhysician:
+          type: string
+        admissionDate:
+          type: string
+          format: date
+        surveillanceStartDate:
+          type: string
+          format: date
+        surveillanceType:
+          type: string
+          enum: [hais, tuberculosis, hiv_aids, outbreak, other]
+        surveillanceSubtype:
+          type: string
         diagnosisText:
           type: string
         haiTypeCode:
           type: string
         organismName:
           type: string
+        dynamicData:
+          type: object
+        clinicalData:
+          type: object
+        supportingExaminations:
+          type: object
+        infectionControl:
+          type: object
+        reportingData:
+          type: object
+        outcome:
+          type: string
+          enum: [hospitalized, discharged, referred, deceased]
+        verificationData:
+          type: object
     SurveillanceCaseCreatedResponse:
       allOf:
         - $ref: '#/components/schemas/Envelope'
