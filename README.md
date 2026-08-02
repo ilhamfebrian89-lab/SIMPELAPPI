@@ -127,6 +127,16 @@ npm run user:set-password -- --user ipcn@simpelappi.local --username ipcn_admin
 
 Ulangi perintah tersebut untuk akun role lain yang digunakan dalam pengujian RBAC.
 
+## Deployment Vercel
+
+Vercel digunakan untuk frontend statis. File `vercel.json` menjalankan `npm run build:vercel` dan memublikasikan folder `public`.
+
+```powershell
+npm run build:vercel
+```
+
+Backend Fastify tidak ikut dipublikasikan sebagai aset statis dan harus dijalankan pada layanan Node.js dengan PostgreSQL.
+
 Untuk verifikasi cepat halaman audit dan state page terkait, jalankan:
 
 ```powershell
