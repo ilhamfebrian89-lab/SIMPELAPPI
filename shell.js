@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuSchema = [
     { href: 'index.html', icon: icons.dashboard, label: 'Dashboard' },
     { href: 'monitoring.html', icon: icons.isolation, label: 'Kewaspadaan Isolasi', caret: true },
-    { href: 'audit.html', icon: icons.bundle, label: 'Bundles HAIs', caret: true },
+    { href: 'bundles-hais.html', icon: icons.bundle, label: 'Bundles HAIs', caret: true },
     { href: 'surveilans.html', icon: icons.surveilans, label: 'Surveilans HAIs', caret: true },
     { href: 'rtl.html', icon: icons.rtl, label: 'PPRA / RTL', caret: true },
     { href: 'notification.html', icon: icons.logbook, label: 'Logbook IPCN' },

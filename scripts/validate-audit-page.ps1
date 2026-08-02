@@ -7,8 +7,10 @@ $ErrorActionPreference = 'Stop'
 $resolvedRoot = (Resolve-Path $RootPath).Path
 $auditHtml = Join-Path $resolvedRoot 'audit.html'
 $auditJs = Join-Path $resolvedRoot 'audit.js'
+$bundlesHtml = Join-Path $resolvedRoot 'bundles-hais.html'
 $monitoringHtml = Join-Path $resolvedRoot 'monitoring.html'
 $monitoringJs = Join-Path $resolvedRoot 'monitoring.js'
+$shellJs = Join-Path $resolvedRoot 'shell.js'
 $stylesCss = Join-Path $resolvedRoot 'styles.css'
 
 function Assert-FileExists {
@@ -36,8 +38,10 @@ Write-Host '[SIMPELAPPI] Validating audit page files...' -ForegroundColor Cyan
 
 Assert-FileExists -PathToCheck $auditHtml
 Assert-FileExists -PathToCheck $auditJs
+Assert-FileExists -PathToCheck $bundlesHtml
 Assert-FileExists -PathToCheck $monitoringHtml
 Assert-FileExists -PathToCheck $monitoringJs
+Assert-FileExists -PathToCheck $shellJs
 Assert-FileExists -PathToCheck $stylesCss
 
 Assert-Contains -PathToCheck $auditHtml -Pattern '<script src="audit\.js"></script>' -Description 'external audit.js include'
@@ -53,6 +57,13 @@ Assert-Contains -PathToCheck $auditJs -Pattern 'debug-audit' -Description 'opt-i
 Assert-Contains -PathToCheck $auditJs -Pattern 'restoreResetSnapshotFromSession\(\);' -Description 'reset snapshot restore'
 Assert-Contains -PathToCheck $auditJs -Pattern 'window\.addEventListener\(\x27pagehide\x27, handlePageHide\)' -Description 'pagehide flush handler'
 Assert-Contains -PathToCheck $auditJs -Pattern 'success-state\.html' -Description 'success redirect target'
+
+Assert-Contains -PathToCheck $bundlesHtml -Pattern 'const DEFAULT_BUNDLES = \[' -Description 'Bundles HAIs configuration'
+Assert-Contains -PathToCheck $bundlesHtml -Pattern 'all-or-none' -Description 'all-or-none compliance calculation'
+Assert-Contains -PathToCheck $bundlesHtml -Pattern 'const MENU=\[\["dashboard","Dashboard"\],\["input","Input Audit"\],\["riwayat","Riwayat"\],\["laporan","Laporan"\],\["pengaturan","Pengaturan"\]\]' -Description 'five Bundles HAIs views'
+Assert-Contains -PathToCheck $bundlesHtml -Pattern 'localStorage\.setItem' -Description 'local audit persistence'
+Assert-Contains -PathToCheck $bundlesHtml -Pattern 'href="index\.html"' -Description 'SIMPELAPPI return link'
+Assert-Contains -PathToCheck $shellJs -Pattern "href: 'bundles-hais\.html'.*label: 'Bundles HAIs'" -Description 'Bundles HAIs menu destination'
 
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<script src="monitoring\.js" defer></script>' -Description 'monitoring form script'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="isolationAssessmentForm"' -Description 'isolation assessment form'
