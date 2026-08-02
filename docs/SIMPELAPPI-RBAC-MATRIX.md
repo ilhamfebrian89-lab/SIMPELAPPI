@@ -25,8 +25,8 @@ Legend:
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | /api/v1/auth/login | POST | ALLOW | ALLOW | ALLOW | ALLOW | ALLOW | ALLOW | Public auth endpoint |
 | /api/v1/dashboard/kpi | GET | ALLOW | ALLOW | ALLOW | OWN-UNIT | OWN-UNIT | ALLOW | Filter unit_id by policy |
-| /api/v1/monitoring | POST | DENY | ALLOW | ALLOW | ALLOW | DENY | ALLOW | IPCLN fokus input monitoring |
-| /api/v1/monitoring/{id}/submit | POST | DENY | ALLOW | ALLOW | ALLOW | DENY | ALLOW | Submit dari creator atau supervisor |
+| /api/v1/monitoring | POST | DENY | ALLOW | ALLOW | OWN-UNIT | DENY | ALLOW | IPCLN fokus input monitoring unit sendiri |
+| /api/v1/monitoring/{id}/submit | POST | DENY | ALLOW | ALLOW | OWN-UNIT | DENY | ALLOW | Submit dari creator atau supervisor |
 | /api/v1/audit | POST | DENY | ALLOW | ALLOW | DENY | DENY | ALLOW | Audit operasional |
 | /api/v1/audit/{id}/approval | POST | DENY | ALLOW | ALLOW | DENY | DENY | ALLOW | Approval utama oleh PPI_CHAIR |
 | /api/v1/rtl | POST | DENY | ALLOW | ALLOW | DENY | ALLOW | ALLOW | UNIT_HEAD boleh buat RTL unit |

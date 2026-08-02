@@ -9,7 +9,7 @@ const roleScopes: Record<string, string[]> = {
   DIRECTOR: ['dashboard:read', 'report:read'],
   PPI_CHAIR: ['monitoring:write', 'audit:approve', 'rtl:write', 'dashboard:read'],
   IPCN: ['monitoring:write', 'audit:write', 'surveilans:write', 'rtl:write', 'notification:read', 'dashboard:read'],
-  IPCLN: ['monitoring:write', 'notification:read', 'dashboard:read:own-unit'],
+  IPCLN: ['monitoring:write:own-unit', 'notification:read', 'dashboard:read:own-unit'],
   UNIT_HEAD: ['rtl:write:own-unit', 'notification:read', 'dashboard:read:own-unit', 'report:read:own-unit'],
   ADMIN: ['admin:*']
 };
