@@ -78,6 +78,9 @@ Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="findingPhotoUpload".*
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="findingPhotoCount">0 foto' -Description 'finding photo counter'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Instalasi Gawat Darurat</option>' -Description 'first hospital unit'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Bank Mata</option>' -Description 'final hospital unit'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="isolationProfession".*name="profession".*required' -Description 'required profession selector'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Dokter</option>' -Description 'first profession'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Lainnya</option>' -Description 'final profession'
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'window\.simpelappiIsolationCategories' -Description 'isolation category configuration'
 Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'parsedIsolationCategories\.length !== 29' -Description '29 isolation category integrity check'
 Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'isolationAssessmentItemCount !== 284' -Description '284 assessment item integrity check'
@@ -87,6 +90,7 @@ Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureLocationDate\.text
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureNameInput\.value = auditorInput\.value' -Description 'automatic auditor signature name'
 Assert-Contains -PathToCheck $monitoringJs -Pattern "canvas\.toDataURL\('image/jpeg', 0\.6\)" -Description 'automatic finding photo compression'
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'photos: findingPhotos\.slice\(\)' -Description 'finding photos persisted with observation'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'profession: form\.elements\.profession\.value' -Description 'profession persisted with observation'
 
 Assert-Contains -PathToCheck $stylesCss -Pattern '\.autosave-activity\.is-active::after' -Description 'autosave animation'
 Assert-Contains -PathToCheck $stylesCss -Pattern 'prefers-reduced-motion: reduce' -Description 'reduced motion support'

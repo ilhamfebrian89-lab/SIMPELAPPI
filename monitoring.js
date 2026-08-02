@@ -284,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
       categoryName: categorySelect.options[categorySelect.selectedIndex]?.textContent ?? '',
       auditor: auditorInput.value.trim(),
       assessmentDate: dateInput.value,
+      profession: form.elements.profession.value,
       unit: form.elements.unit.value,
       assessments: Array.from(assessmentList.querySelectorAll('.isolation-assessment-item')).map((item, index) => ({
         item: item.querySelector('strong')?.textContent ?? '',
@@ -306,6 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     auditorInput.value = payload.auditor ?? '';
     dateInput.value = payload.assessmentDate ?? '';
     updateSignatureDate();
+    form.elements.profession.value = payload.profession ?? '';
     form.elements.unit.value = payload.unit ?? '';
     form.elements.analysis.value = payload.analysis ?? '';
     form.elements.findings.value = payload.findings ?? '';
@@ -376,6 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const requiredFields = [
       ['auditor', payload.auditor, 'Nama auditor wajib diisi.'],
       ['assessmentDate', payload.assessmentDate, 'Tanggal wajib diisi.'],
+      ['profession', payload.profession, 'Profesi wajib dipilih.'],
       ['unit', payload.unit, 'Unit wajib dipilih.'],
       ['analysis', payload.analysis, 'Analisis wajib diisi.'],
       ['findings', payload.findings, 'Temuan wajib diisi.'],
@@ -434,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const detail = document.createElement('span');
       const score = document.createElement('small');
       title.textContent = `${entry.mode === 'audit' ? 'Audit' : 'Supervisi'} - ${entry.categoryName}`;
-      detail.textContent = `${entry.unit} | ${entry.assessmentDate}`;
+      detail.textContent = `${entry.profession || 'Profesi belum diisi'} | ${entry.unit} | ${entry.assessmentDate}`;
       const photoSummary = Array.isArray(entry.photos) && entry.photos.length > 0 ? ` - ${entry.photos.length} foto` : '';
       score.textContent = `${entry.auditor} - Skor ${entry.score}${photoSummary}`;
       item.append(title, detail, score);
