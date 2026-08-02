@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filenameDate = formatReportDate(payload.assessmentDate, true) || 'Tanggal_Belum_Diisi';
     const filenameBase = `${modeLabel}_${toFilenamePart(categoryName) || 'Jenis_Belum_Dipilih'}_${filenameDate}`;
     const filename = `${filenameBase}.pdf`;
-    const logoUrl = new URL('assets/kemenkes-rs-cicendo.svg', window.location.href).href;
+    const logoUrl = new URL('assets/kemenkes-upload.png', window.location.href).href;
     const assessmentRows = payload.assessments
       .map(
         (assessment, index) => `
@@ -394,8 +394,8 @@ document.addEventListener('DOMContentLoaded', () => {
               @page { size: 210mm 330mm portrait; margin: 14mm 14mm 20mm; }
               * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
               html, body { margin: 0; padding: 0; color: #172033; font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; line-height: 1.45; }
-              .report-header { display: grid; grid-template-columns: 30mm 1fr; align-items: center; gap: 7mm; margin-bottom: 6mm; padding: 5mm 6mm; border-radius: 4mm; background: linear-gradient(135deg, #064e3b, #0f766e); color: #fff; }
-              .report-header img { width: 28mm; max-height: 22mm; padding: 2mm; border-radius: 2mm; background: #fff; object-fit: contain; }
+              .report-header { display: grid; grid-template-columns: 46mm 1fr; align-items: center; gap: 5mm; margin-bottom: 6mm; padding: 5mm 6mm; border-radius: 4mm; background: linear-gradient(135deg, #064e3b, #0f766e); color: #fff; }
+              .report-header img { display: block; width: 44mm; height: auto; padding: 2mm; border-radius: 2mm; background: #fff; object-fit: contain; overflow: visible; }
               .hospital-name { margin: 0; font-size: 15pt; font-weight: 800; letter-spacing: .02em; line-height: 1.2; }
               .hospital-subtitle { margin: 1mm 0 0; font-size: 11pt; font-weight: 700; }
               .committee { margin: 2mm 0 0; font-size: 9.5pt; }
