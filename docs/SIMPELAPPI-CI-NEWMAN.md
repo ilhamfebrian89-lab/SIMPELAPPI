@@ -15,7 +15,7 @@ Panduan ini menjelaskan cara menjalankan koleksi Postman secara otomatis dengan 
 
 ## Prasyarat
 
-- Node.js 18+
+- Node.js 20+
 - npx tersedia
 - API target aktif di baseUrl
 
@@ -31,29 +31,24 @@ Output:
 - report CLI pada terminal
 - file junit XML per collection di root proyek
 
-## Integrasi CI (contoh langkah)
+## Integrasi GitHub Actions
 
-1. Install dependency runtime:
+Workflow tersedia pada `.github/workflows/newman.yml` dan dijalankan melalui menu **Actions > Newman API Tests > Run workflow**.
 
-```bash
-npm install -g newman
-```
+Input wajib:
 
-1. Jalankan script:
+- `base_url`: URL API lengkap sampai prefix `/api/v1`
 
-```powershell
-powershell -ExecutionPolicy Bypass -File ./scripts/run-newman.ps1 -BaseUrl "http://api:8080/api/v1"
-```
+Workflow menggunakan Node.js 20, menjalankan ketiga koleksi melalui `scripts/run-newman.ps1`, dan menyimpan report JUnit sebagai artifact selama 14 hari.
 
-1. Publish artefak junit XML ke test report CI.
+Tambahkan repository secret `SIMPELAPPI_TEST_PASSWORD`. Password tersebut harus sudah diprovision ke akun uji IPCN, PPI_CHAIR, DIRECTOR, UNIT_HEAD, dan IPCLN. Collection login sendiri untuk memperoleh token berumur pendek; token tidak disimpan sebagai GitHub secret.
 
-1. Jalankan audit page validation sebagai quality gate UI statis:
+Newman juga dapat diaktifkan dari workflow `Release Gate` dengan mengisi:
 
-```powershell
-powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-page.ps1
-```
+- `run_newman`: `true`
+- `base_url`: endpoint API pengujian yang dapat diakses oleh GitHub-hosted runner
 
-Pengecekan ini menutup gap non-API quality gate dengan memastikan halaman audit, state page, dan aset pendukung tetap konsisten.
+Newman tidak dijalankan otomatis pada pull request karena pengujian end-to-end memerlukan environment API dengan database seed dan akun uji yang sudah diprovision. Type-check, unit/API injection test, SQL migration, dan UI statis tetap berjalan otomatis.
 
 ## Exit Code
 
@@ -63,5 +58,8 @@ Pengecekan ini menutup gap non-API quality gate dengan memastikan halaman audit,
 ## Catatan
 
 - Token harus disuplai ke environment sebelum run.
+- Positive collection menjalankan login terlebih dahulu dan menyimpan access token. Isi `username` dan `password` melalui environment lokal/CI, bukan di file collection.
+- Token role dibuat oleh request setup di setiap collection.
 - Untuk RBAC OWN-UNIT, pastikan data seed V005 sudah tersedia.
-- Audit page check dapat dipanggil di release gate bersama SQL check dan Newman.
+- Jangan menggunakan endpoint produksi untuk pengujian Newman.
+- Report `newman-*.xml` merupakan output sementara dan diabaikan oleh Git.

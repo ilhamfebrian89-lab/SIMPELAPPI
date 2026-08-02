@@ -4,13 +4,25 @@ Proyek ini berisi prototype statis awal untuk SIMPELAPPI berdasarkan spesifikasi
 
 ## CI Status
 
-Ganti `OWNER/REPO` dengan repository GitHub Anda.
+[![SQL Migration Check](https://github.com/ilhamfebrian89-lab/SIMPELAPPI/actions/workflows/sql-check.yml/badge.svg)](https://github.com/ilhamfebrian89-lab/SIMPELAPPI/actions/workflows/sql-check.yml)
+[![Audit Page Check](https://github.com/ilhamfebrian89-lab/SIMPELAPPI/actions/workflows/audit-page-check.yml/badge.svg)](https://github.com/ilhamfebrian89-lab/SIMPELAPPI/actions/workflows/audit-page-check.yml)
+[![Backend Check](https://github.com/ilhamfebrian89-lab/SIMPELAPPI/actions/workflows/backend-check.yml/badge.svg)](https://github.com/ilhamfebrian89-lab/SIMPELAPPI/actions/workflows/backend-check.yml)
 
-![Newman API Tests](https://github.com/OWNER/REPO/actions/workflows/newman.yml/badge.svg)
-![SQL Migration Check](https://github.com/OWNER/REPO/actions/workflows/sql-check.yml/badge.svg)
-![Audit Page Check](https://github.com/OWNER/REPO/actions/workflows/audit-page-check.yml/badge.svg)
-![Release Gate](https://github.com/OWNER/REPO/actions/workflows/release-gate.yml/badge.svg)
-![KPI Monthly Pipeline](https://github.com/OWNER/REPO/actions/workflows/kpi-monthly.yml/badge.svg)
+Quality gate otomatis pada pull request:
+
+- `SQL Migration Check` menjalankan migrasi, rollback, dan migrasi ulang pada PostgreSQL 16.
+- `Audit Page Check` memeriksa sintaks JavaScript dan integritas halaman audit.
+- `Backend Check` menjalankan type-check, test, dan build API Fastify.
+
+Ketiga workflow dijalankan pada setiap pull request agar required check tidak tertahan ketika perubahan berada di luar path tertentu.
+
+Workflow yang memerlukan layanan eksternal dijalankan terpisah:
+
+- `Newman API Tests` dijalankan manual dengan input URL API yang aktif.
+- `Release Gate` menggabungkan pemeriksaan SQL dan UI, dengan Newman opsional ketika API tersedia.
+- `KPI Monthly Pipeline` berjalan tanggal 2 setiap bulan atau secara manual menggunakan GitHub Actions secrets database.
+
+> **Catatan:** frontend masih berupa prototipe statis. Backend Fastify menyediakan kontrak API awal dan perlu dihubungkan ke halaman HTML pada tahap berikutnya.
 
 ## Struktur File
 
@@ -59,7 +71,8 @@ Ganti `OWNER/REPO` dengan repository GitHub Anda.
 - `database/migrations/V003__seed_templates_and_questions.sql` — seed template monitoring, question bank, dan master enum
 - `database/migrations/V004__seed_audit_templates.sql` — seed audit template, check item, dan recommendation library
 - `database/migrations/V005__seed_e2e_demo_data.sql` — seed data demo end-to-end audit dan RTL
-- `database/rollback/*.sql` — rollback script per versi migrasi (R001-R005)
+- `database/migrations/V006__add_user_credentials.sql` — tabel kredensial internal tanpa default password
+- `database/rollback/*.sql` — rollback script per versi migrasi (R001-R006)
 - `scripts/run-newman.ps1` — runner koleksi Postman via Newman
 - `scripts/kpi-monthly-report.sql` — query SQL untuk ekstraksi KPI bulanan
 - `scripts/export-kpi-monthly.ps1` — automasi export KPI bulanan ke folder evidence
@@ -71,18 +84,48 @@ Ganti `OWNER/REPO` dengan repository GitHub Anda.
 - `.github/workflows/newman.yml` — workflow GitHub Actions untuk Newman test
 - `.github/workflows/sql-check.yml` — workflow validasi SQL migration dan rollback
 - `.github/workflows/audit-page-check.yml` — workflow validasi audit page, audit.js, dan state page
-- `.github/workflows/release-gate.yml` — workflow release gate (wajib lulus sql-check, newman, dan audit page check)
+- `.github/workflows/backend-check.yml` — workflow type-check, test, dan build backend
+- `.github/workflows/release-gate.yml` — workflow release gate SQL, UI, backend, dan Newman opsional
 - `.github/workflows/kpi-monthly.yml` — workflow terjadwal bulanan untuk KPI pipeline dan evidence artifact
 - `.github/branch-protection-ruleset-example.json` — template ruleset branch protection
 - `.github/ISSUE_TEMPLATE/incident-report.yml` — template issue untuk pelaporan insiden
 - `.github/ISSUE_TEMPLATE/post-incident-review.yml` — template issue untuk PIR (root cause analysis)
 - `.github/ISSUE_TEMPLATE/config.yml` — konfigurasi template issue GitHub
 - `.env.ci.example` — template variabel secret untuk setup CI
+- `.env.example` — template konfigurasi backend lokal tanpa kredensial nyata
+- `.gitignore` — pengecualian report Newman, evidence KPI, dan environment lokal
 - `docker/docker-compose.dev.yml` — local dev stack (PostgreSQL, pgAdmin, MailHog)
+- `src/` — source code backend Fastify TypeScript
+- `package.json` — perintah development, build, test, dan provisioning password
+- `Dockerfile` — image production backend API
 
 ## Cara Menjalankan
 
-Buka file `index.html` langsung di browser, atau gunakan server lokal sederhana.
+Buka file `index.html` langsung di browser, atau gunakan server lokal sederhana untuk frontend.
+
+Backend API dapat dijalankan dengan:
+
+```powershell
+Copy-Item .env.example .env
+# Ganti JWT_SECRET di .env dengan secret acak minimal 32 karakter.
+npm install
+npm run dev
+```
+
+Endpoint pemeriksaan:
+
+- `GET http://localhost:8080/health`
+- `GET http://localhost:8080/ready`
+
+Setelah migrasi database dijalankan, buat kredensial pengguna tanpa menyimpan password di repository:
+
+```powershell
+$env:DATABASE_URL = "postgresql://simpelappi:simpelappi_dev@localhost:5432/simpelappi"
+$env:SIMPELAPPI_USER_PASSWORD = "<password-kuat-minimal-12-karakter>"
+npm run user:set-password -- --user ipcn@simpelappi.local --username ipcn_admin
+```
+
+Ulangi perintah tersebut untuk akun role lain yang digunakan dalam pengujian RBAC.
 
 Untuk verifikasi cepat halaman audit dan state page terkait, jalankan:
 
@@ -91,3 +134,9 @@ powershell -ExecutionPolicy Bypass -File .\scripts\validate-audit-page.ps1
 ```
 
 Jalankan validasi ini setiap kali mengubah `audit.html`, `audit.js`, `styles.css`, atau halaman state terkait.
+
+## Konfigurasi Repository
+
+1. Salin nama variabel dari `.env.ci.example` ke GitHub Actions secrets. Jangan mengunggah nilai secret ke repository.
+1. Terapkan `.github/branch-protection-ruleset-example.json` melalui GitHub Rulesets dan sesuaikan reviewer dengan tim.
+1. Jalankan `Release Gate` secara manual sebelum rilis. Aktifkan input Newman hanya jika endpoint API pengujian dapat diakses dari GitHub-hosted runner.

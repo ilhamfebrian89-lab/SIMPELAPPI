@@ -73,4 +73,4 @@ Secret minimum yang harus diisi di GitHub repository:
 - SIMPELAPPI_DB_USER
 - SIMPELAPPI_DB_PASSWORD
 
-Workflow juga dapat dijalankan manual melalui `workflow_dispatch` dengan input `periodMonth` (format YYYY-MM).
+Workflow juga dapat dijalankan manual melalui `workflow_dispatch` dengan input `period_month` (format YYYY-MM). Jika dikosongkan, workflow menggunakan bulan sebelumnya dalam UTC.

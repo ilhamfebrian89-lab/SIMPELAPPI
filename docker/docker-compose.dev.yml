@@ -1,6 +1,38 @@
 version: "3.9"
 
 services:
+  api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: simpelappi-api
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: 8080
+      LOG_LEVEL: info
+      DATABASE_URL: postgresql://simpelappi:simpelappi_dev@postgres:5432/simpelappi
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in your environment or .env file}
+      JWT_ISSUER: simpelappi-auth
+      JWT_AUDIENCE: simpelappi-api
+      CORS_ORIGINS: http://localhost:3000,http://localhost:8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://localhost:8080/ready').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   postgres:
     image: postgres:16
     container_name: simpelappi-postgres

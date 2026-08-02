@@ -2,7 +2,7 @@
   "info": {
     "name": "SIMPELAPPI API v1",
     "_postman_id": "f8d334c7-cd90-47d1-b98f-ef84cf4d95a2",
-    "description": "Postman collection derived from SIMPELAPPI OpenAPI draft.",
+    "description": "Executable collection for the SIMPELAPPI OpenAPI contract.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -11,14 +11,54 @@
       "item": [
         {
           "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status should be 200', function () { pm.response.to.have.status(200); });",
+                  "var jsonData = pm.response.json();",
+                  "pm.environment.set('accessToken', jsonData.data.accessToken);",
+                  "pm.environment.set('refreshToken', jsonData.data.refreshToken);"
+                ]
+              }
+        },
+        {
+              "name": "Login PPI Chair",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('PPI chair login should succeed', function () { pm.response.to.have.status(200); });",
+                      "pm.environment.set('ppiChairToken', pm.response.json().data.accessToken);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"{{ppiChairUsername}}\",\n  \"password\": \"{{password}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/login",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "login"]
+                }
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"ipcn_admin\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
@@ -34,6 +74,19 @@
       "item": [
         {
           "name": "Create Monitoring",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status should be 201', function () { pm.response.to.have.status(201); });",
+                  "var jsonData = pm.response.json();",
+                  "pm.environment.set('monitoringId', jsonData.data.monitoringId);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -42,7 +95,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"monitoringDate\": \"2026-08-01\",\n  \"unitId\": \"11111111-1111-1111-1111-111111111111\",\n  \"observerUserId\": \"22222222-2222-2222-2222-222222222223\",\n  \"items\": [\n    {\n      \"questionCode\": \"HH-01\",\n      \"answerValue\": \"yes\",\n      \"scoreValue\": 1\n    }\n  ]\n}"
+              "raw": "{\n  \"monitoringDate\": \"2026-08-01\",\n  \"unitId\": \"11111111-1111-1111-1111-111111111111\",\n  \"observerUserId\": \"22222222-2222-2222-2222-222222222223\",\n  \"items\": [{\"questionCode\": \"HH-01\", \"answerValue\": \"yes\", \"scoreValue\": 1}]\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/monitoring",
@@ -53,6 +106,15 @@
         },
         {
           "name": "Submit Monitoring",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status should be 200', function () { pm.response.to.have.status(200); });"]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -77,6 +139,19 @@
       "item": [
         {
           "name": "Create Audit",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status should be 201', function () { pm.response.to.have.status(201); });",
+                  "var jsonData = pm.response.json();",
+                  "pm.environment.set('auditId', jsonData.data.auditId);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -96,10 +171,19 @@
         },
         {
           "name": "Approve Audit",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status should be 200', function () { pm.response.to.have.status(200); });"]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Authorization", "value": "Bearer {{ppiChairToken}}" },
               { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
@@ -120,6 +204,15 @@
       "item": [
         {
           "name": "Create RTL",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status should be 201', function () { pm.response.to.have.status(201); });"]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -144,6 +237,15 @@
       "item": [
         {
           "name": "Create Case",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status should be 201', function () { pm.response.to.have.status(201); });"]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -168,11 +270,18 @@
       "item": [
         {
           "name": "List Notifications",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Status should be 200', function () { pm.response.to.have.status(200); });"]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
-            ],
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
             "url": {
               "raw": "{{baseUrl}}/notifications?page=1&size=20",
               "host": ["{{baseUrl}}"],
@@ -189,8 +298,12 @@
   ],
   "variable": [
     { "key": "baseUrl", "value": "http://localhost:8080/api/v1" },
+    { "key": "username", "value": "ipcn_admin" },
+    { "key": "ppiChairUsername", "value": "ppi_chair_test" },
+    { "key": "password", "value": "" },
     { "key": "accessToken", "value": "" },
-    { "key": "monitoringId", "value": "33333333-3333-3333-3333-333333333331" },
+    { "key": "ppiChairToken", "value": "" },
+    { "key": "monitoringId", "value": "" },
     { "key": "auditId", "value": "" }
   ]
 }

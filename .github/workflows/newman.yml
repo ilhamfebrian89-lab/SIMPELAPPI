@@ -1,0 +1,55 @@
+name: Newman API Tests
+
+on:
+  workflow_call:
+    inputs:
+      base_url:
+        description: API base URL, including /api/v1
+        required: true
+        type: string
+    secrets:
+      test_password:
+        description: Shared password for provisioned CI test accounts
+        required: true
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: API base URL, including /api/v1
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  run-newman:
+    name: Run Newman collections
+    runs-on: ubuntu-latest
+    env:
+      API_BASE_URL: ${{ inputs.base_url }}
+      TEST_PASSWORD: ${{ secrets.test_password || secrets.SIMPELAPPI_TEST_PASSWORD }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run API collections
+        shell: pwsh
+        run: |
+          if (-not $env:TEST_PASSWORD) {
+            throw "Configure the SIMPELAPPI_TEST_PASSWORD repository secret."
+          }
+          ./scripts/run-newman.ps1 -BaseUrl $env:API_BASE_URL -TestPassword $env:TEST_PASSWORD
+
+      - name: Upload JUnit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-junit-reports
+          path: newman-*.xml
+          if-no-files-found: warn
+          retention-days: 14

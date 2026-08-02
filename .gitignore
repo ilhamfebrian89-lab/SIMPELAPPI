@@ -1,0 +1,16 @@
+# Newman test reports
+newman-*.xml
+
+# Generated KPI evidence
+evidence/kpi/
+
+# Local environment files
+.env
+.env.*
+!.env.ci.example
+!.env.example
+
+# Node.js output
+node_modules/
+dist/
+coverage/
