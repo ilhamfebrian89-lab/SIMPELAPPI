@@ -460,9 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="info-row"><span class="info-label">Jenis ${escapeReportHtml(modeLabel)}</span><span class="info-value">${escapeReportHtml(categoryName)}</span></div>
               <div class="info-row"><span class="info-label">Tanggal ${escapeReportHtml(modeLabel)}</span><span class="info-value">${escapeReportHtml(reportDate)}</span></div>
               <div class="info-row"><span class="info-label">Unit</span><span class="info-value">${escapeReportHtml(payload.unit || '-')}</span></div>
-              <div class="info-row"><span class="info-label">Ruangan</span><span class="info-value">-</span></div>
               <div class="info-row"><span class="info-label">Auditor</span><span class="info-value">${escapeReportHtml(payload.auditor || '-')}</span></div>
-              <div class="info-row"><span class="info-label">Petugas yang Diaudit</span><span class="info-value">-</span></div>
               <div class="info-row"><span class="info-label">Profesi</span><span class="info-value">${escapeReportHtml(payload.profession || '-')}</span></div>
             </section>
 
