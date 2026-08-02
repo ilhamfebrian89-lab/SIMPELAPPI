@@ -71,6 +71,8 @@ Assert-Contains -PathToCheck $monitoringHtml -Pattern '<script src="monitoring\.
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<script src="isolation-categories\.js" defer></script>' -Description 'isolation category configuration script'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="isolationAssessmentForm"' -Description 'isolation assessment form'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="auditorSignature"' -Description 'digital signature canvas'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Instalasi Gawat Darurat</option>' -Description 'first hospital unit'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Bank Mata</option>' -Description 'final hospital unit'
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'window\.simpelappiIsolationCategories' -Description 'isolation category configuration'
 Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'parsedIsolationCategories\.length !== 29' -Description '29 isolation category integrity check'
 Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'isolationAssessmentItemCount !== 284' -Description '284 assessment item integrity check'
