@@ -394,7 +394,6 @@ document.addEventListener('DOMContentLoaded', () => {
               @page { size: 210mm 330mm portrait; margin: 14mm 14mm 20mm; }
               * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
               html, body { margin: 0; padding: 0; color: #172033; font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; line-height: 1.45; }
-              body { padding-bottom: 16mm; }
               .report-header { display: grid; grid-template-columns: 30mm 1fr; align-items: center; gap: 7mm; margin-bottom: 6mm; padding: 5mm 6mm; border-radius: 4mm; background: linear-gradient(135deg, #064e3b, #0f766e); color: #fff; }
               .report-header img { width: 28mm; max-height: 22mm; padding: 2mm; border-radius: 2mm; background: #fff; object-fit: contain; }
               .hospital-name { margin: 0; font-size: 15pt; font-weight: 800; letter-spacing: .02em; line-height: 1.2; }
@@ -438,10 +437,8 @@ document.addEventListener('DOMContentLoaded', () => {
               .signature-image { display: block; width: 58mm; height: 27mm; margin: 0 auto 2mm; object-fit: contain; }
               .signature-placeholder { display: grid; place-items: end center; height: 27mm; margin-bottom: 2mm; }
               .signature-name { padding-top: 1.5mm; border-top: .75pt solid #334155; font-weight: 700; }
-              .report-footer { position: fixed; right: 0; bottom: -13mm; left: 0; padding-top: 2mm; border-top: .75pt solid #94a3b8; color: #64748b; font-size: 8.5pt; text-align: center; }
               @media screen {
-                body { max-width: 210mm; min-height: 330mm; margin: 12mm auto; padding: 14mm 14mm 25mm; box-shadow: 0 8px 30px rgba(15, 23, 42, .16); }
-                .report-footer { right: 14mm; bottom: 7mm; left: 14mm; }
+                body { max-width: 210mm; min-height: 330mm; margin: 12mm auto; padding: 14mm; box-shadow: 0 8px 30px rgba(15, 23, 42, .16); }
               }
             </style>
           </head>
@@ -505,9 +502,6 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </section>
 
-            <footer class="report-footer">
-              <strong>SIMPELAPPI</strong>
-            </footer>
           </body>
         </html>`
     };
