@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'audit';
   let isDrawing = false;
   let hasSignature = false;
-  let signatureNameTouched = false;
 
   function getLocalDate() {
     const now = new Date();
@@ -195,8 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.elements.findings.value = payload.findings ?? '';
     form.elements.followUp.value = payload.followUp ?? '';
     form.elements.recommendation.value = payload.recommendation ?? '';
-    signatureNameInput.value = payload.signatureName ?? '';
-    signatureNameTouched = Boolean(payload.signatureName);
+    signatureNameInput.value = payload.auditor ?? '';
 
     if (Array.isArray(payload.assessments)) {
       payload.assessments.forEach((assessment, index) => {
@@ -326,7 +324,6 @@ document.addEventListener('DOMContentLoaded', () => {
     categorySelect.value = selectedCategory || isolationCategories[0].id;
     dateInput.value = getLocalDate();
     updateSignatureDate();
-    signatureNameTouched = false;
     clearSignature();
     renderAssessmentItems();
     clearErrors();
@@ -380,12 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   auditorInput.addEventListener('input', () => {
-    if (!signatureNameTouched) {
-      signatureNameInput.value = auditorInput.value;
-    }
-  });
-  signatureNameInput.addEventListener('input', () => {
-    signatureNameTouched = true;
+    signatureNameInput.value = auditorInput.value;
   });
   dateInput.addEventListener('change', updateSignatureDate);
   categorySelect.addEventListener('change', () => {
