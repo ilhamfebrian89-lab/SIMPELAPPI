@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <script src="shell.js" defer></script>
+    <script src="monitoring.js" defer></script>
   </head>
   <body>
     <div class="dashboard-shell">
@@ -66,112 +67,141 @@
 
         <section class="workspace-head">
           <div>
-            <p class="eyebrow">Monitoring Digital</p>
-            <h3>Kepatuhan Hand Hygiene - ICU</h3>
-            <p class="workspace-subtitle">Observasi kepatuhan harian dengan bukti terstruktur</p>
+            <p class="eyebrow">Kewaspadaan Isolasi</p>
+            <h3>Formulir Audit dan Supervisi</h3>
+            <p class="workspace-subtitle">Dokumentasi terstruktur untuk 14 jenis kewaspadaan isolasi</p>
           </div>
-
-          <div class="workspace-filters">
-            <label class="filter-chip">
-              <span>📅</span>
-              <select aria-label="Periode monitoring">
-                <option>Juni 2026</option>
-                <option>Juli 2026</option>
-                <option>Agustus 2026</option>
-              </select>
-            </label>
-            <label class="filter-chip">
-              <span>▾</span>
-              <select aria-label="Unit monitoring">
-                <option>ICU</option>
-                <option>IGD</option>
-                <option>Rawat Inap</option>
-              </select>
-            </label>
-            <a class="btn btn-primary btn-export" href="report.html">⬇ Ekspor Rekap</a>
+          <div class="isolation-progress">
+            <strong>14</strong>
+            <span>jenis tersedia</span>
           </div>
         </section>
 
-        <section class="metric-grid monitor-metric-grid">
-          <article class="metric-card metric-green">
-            <div class="metric-icon">✋</div>
-            <div>
-              <p>Kepatuhan Hari Ini</p>
-              <strong>86,4%</strong>
-              <span>Target 85%</span>
+        <div class="inline-alert" id="isolationAlert" role="status" aria-live="polite"></div>
+
+        <section class="isolation-layout">
+          <article class="panel isolation-form-panel">
+            <div class="isolation-mode-tabs" role="tablist" aria-label="Jenis formulir">
+              <button class="isolation-mode-tab active" type="button" role="tab" aria-selected="true" data-form-mode="audit">Formulir Audit</button>
+              <button class="isolation-mode-tab" type="button" role="tab" aria-selected="false" data-form-mode="supervisi">Formulir Supervisi</button>
             </div>
+
+            <form id="isolationAssessmentForm" novalidate>
+              <div class="form-section-head">
+                <div>
+                  <p class="eyebrow" id="formModeEyebrow">Audit Kewaspadaan Isolasi</p>
+                  <h3 id="formModeTitle">Formulir Audit</h3>
+                </div>
+                <div class="isolation-score" aria-live="polite">
+                  <strong id="isolationScore">0</strong>
+                  <span>Skor</span>
+                </div>
+              </div>
+
+              <fieldset class="form-section">
+                <legend>Identitas Pelaksanaan</legend>
+                <div class="isolation-field-grid">
+                  <div class="field-row">
+                    <label for="isolationAuditor">Nama Auditor</label>
+                    <input id="isolationAuditor" name="auditor" type="text" maxlength="180" autocomplete="name" required />
+                    <small class="input-error" data-error-for="auditor"></small>
+                  </div>
+                  <div class="field-row">
+                    <label for="isolationDate">Tanggal Audit/Supervisi</label>
+                    <input id="isolationDate" name="assessmentDate" type="date" required />
+                    <small class="input-error" data-error-for="assessmentDate"></small>
+                  </div>
+                  <div class="field-row">
+                    <label for="isolationUnit">Unit</label>
+                    <select id="isolationUnit" name="unit" required>
+                      <option value="">Pilih unit</option>
+                      <option>ICU</option>
+                      <option>IGD</option>
+                      <option>HCU</option>
+                      <option>Rawat Inap</option>
+                      <option>Rawat Jalan</option>
+                      <option>Kamar Operasi</option>
+                      <option>Laboratorium</option>
+                    </select>
+                    <small class="input-error" data-error-for="unit"></small>
+                  </div>
+                  <div class="field-row">
+                    <label for="isolationCategory">Jenis Kewaspadaan Isolasi</label>
+                    <select id="isolationCategory" name="category" required></select>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="form-section">
+                <legend>Item Penilaian</legend>
+                <p class="form-section-description" id="categoryDescription"></p>
+                <div class="isolation-assessment-list" id="isolationAssessmentList"></div>
+                <small class="input-error" data-error-for="assessments"></small>
+              </fieldset>
+
+              <fieldset class="form-section">
+                <legend>Analisis dan Tindak Lanjut</legend>
+                <div class="isolation-text-grid">
+                  <div class="field-row">
+                    <label for="isolationAnalysis">Analisis</label>
+                    <textarea id="isolationAnalysis" name="analysis" rows="4" required placeholder="Tuliskan analisis hasil penilaian..."></textarea>
+                    <small class="input-error" data-error-for="analysis"></small>
+                  </div>
+                  <div class="field-row">
+                    <label for="isolationFindings">Temuan</label>
+                    <textarea id="isolationFindings" name="findings" rows="4" required placeholder="Tuliskan temuan utama dan bukti pendukung..."></textarea>
+                    <small class="input-error" data-error-for="findings"></small>
+                  </div>
+                  <div class="field-row">
+                    <label for="isolationFollowUp">Rencana Tindak Lanjut</label>
+                    <textarea id="isolationFollowUp" name="followUp" rows="4" required placeholder="Tuliskan tindakan, PIC, dan target waktu..."></textarea>
+                    <small class="input-error" data-error-for="followUp"></small>
+                  </div>
+                  <div class="field-row">
+                    <label for="isolationRecommendation">Rekomendasi</label>
+                    <textarea id="isolationRecommendation" name="recommendation" rows="4" required placeholder="Tuliskan rekomendasi untuk unit..."></textarea>
+                    <small class="input-error" data-error-for="recommendation"></small>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="form-section">
+                <legend>Tanda Tangan Digital Auditor</legend>
+                <div class="signature-grid">
+                  <div class="signature-pad-wrap">
+                    <canvas id="auditorSignature" class="signature-pad" width="720" height="240" aria-label="Area tanda tangan digital auditor"></canvas>
+                    <p>Gunakan mouse, stylus, atau jari untuk menandatangani.</p>
+                  </div>
+                  <div class="signature-details">
+                    <div class="field-row">
+                      <label for="signatureAuditorName">Nama Lengkap Auditor</label>
+                      <input id="signatureAuditorName" name="signatureName" type="text" maxlength="180" required />
+                      <small class="input-error" data-error-for="signatureName"></small>
+                    </div>
+                    <button class="btn btn-secondary" id="clearSignatureButton" type="button">Hapus Tanda Tangan</button>
+                    <small class="input-error" data-error-for="signature"></small>
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="isolation-form-actions">
+                <p id="isolationDraftStatus">Draft belum disimpan.</p>
+                <div class="action-row">
+                  <button class="btn btn-secondary" id="resetIsolationFormButton" type="button">Reset</button>
+                  <button class="btn btn-secondary" id="saveIsolationDraftButton" type="button">Simpan Draft</button>
+                  <button class="btn btn-primary" type="submit">Submit Formulir</button>
+                </div>
+              </div>
+            </form>
           </article>
-          <article class="metric-card metric-blue">
-            <div class="metric-icon">📌</div>
-            <div>
-              <p>Observasi Tercatat</p>
-              <strong>32</strong>
-              <span>Shift pagi & sore</span>
-            </div>
-          </article>
-          <article class="metric-card metric-orange">
-            <div class="metric-icon">⚠</div>
-            <div>
-              <p>Temuan Minor</p>
-              <strong>5</strong>
-              <span>Perlu tindak lanjut</span>
-            </div>
-          </article>
-        </section>
 
-        <section class="dashboard-grid monitor-board">
-          <article class="panel panel-span-2">
-            <div class="panel-header">
-              <h3>Form Monitoring Harian</h3>
-            </div>
-            <div class="form-card stack-card">
-              <div class="field-row">
-                <label>Unit</label>
-                <select title="Unit"><option>ICU</option></select>
-              </div>
-              <div class="field-row">
-                <label>Tanggal</label>
-                <input type="date" title="Tanggal" value="2026-08-01" />
-              </div>
-              <div class="field-row">
-                <label>Petugas</label>
-                <input type="text" title="Petugas" value="IPCLN" />
-              </div>
-
-              <div class="checklist">
-                <label><input type="checkbox" checked /> Hand Hygiene</label>
-                <label><input type="checkbox" checked /> APD</label>
-                <label><input type="checkbox" /> Linen</label>
-                <label><input type="checkbox" checked /> Pengelolaan Sampah</label>
-              </div>
-
-              <div class="photo-box">📷 Upload bukti foto</div>
-              <textarea rows="3" placeholder="Catatan observasi..."></textarea>
-
-              <div class="action-row">
-                <button class="btn btn-secondary">Simpan Draft</button>
-                <button class="btn btn-primary">Submit</button>
-              </div>
-            </div>
-          </article>
-
-          <article class="panel">
-            <div class="panel-header"><h3>Status Input</h3></div>
-            <ul class="notify-list">
-              <li>Shift Pagi: selesai</li>
-              <li>Shift Sore: on progress</li>
-              <li>Shift Malam: belum mulai</li>
+          <aside class="panel isolation-summary-panel">
+            <div class="panel-header"><h3>Riwayat Terakhir</h3></div>
+            <p class="form-section-description">Data tersimpan lokal pada perangkat ini sampai integrasi API diaktifkan.</p>
+            <ul class="isolation-history" id="isolationHistory">
+              <li class="isolation-history-empty">Belum ada formulir yang disubmit.</li>
             </ul>
-          </article>
-
-          <article class="panel">
-            <div class="panel-header"><h3>Checklist Kritis</h3></div>
-            <div class="task-list">
-              <div class="task-item"><span>5 Momen Cuci Tangan</span><strong>87%</strong></div>
-              <div class="task-item"><span>APD Sesuai SOP</span><strong>82%</strong></div>
-              <div class="task-item"><span>Linen Kotor</span><strong>79%</strong></div>
-            </div>
-          </article>
+          </aside>
         </section>
       </main>
     </div>

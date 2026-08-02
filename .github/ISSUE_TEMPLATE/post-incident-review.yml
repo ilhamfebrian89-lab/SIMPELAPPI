@@ -1,0 +1,59 @@
+name: Post-incident review
+description: Dokumentasikan akar masalah dan tindak lanjut setelah insiden selesai.
+title: "[PIR]: "
+labels:
+  - post-incident-review
+body:
+  - type: input
+    id: incident
+    attributes:
+      label: Incident terkait
+      placeholder: "#123"
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Ringkasan
+      description: Ringkas kejadian, dampak, dan durasi insiden.
+    validations:
+      required: true
+  - type: textarea
+    id: timeline
+    attributes:
+      label: Timeline
+      placeholder: |
+        - 08:00 WIB - insiden terdeteksi
+        - 08:15 WIB - mitigasi dimulai
+        - 09:00 WIB - layanan pulih
+    validations:
+      required: true
+  - type: textarea
+    id: root-cause
+    attributes:
+      label: Akar masalah
+    validations:
+      required: true
+  - type: textarea
+    id: response
+    attributes:
+      label: Evaluasi respons
+      description: Jelaskan hal yang berjalan baik dan yang perlu diperbaiki.
+    validations:
+      required: true
+  - type: textarea
+    id: actions
+    attributes:
+      label: Tindakan korektif
+      description: Cantumkan owner dan target waktu untuk setiap tindakan.
+      placeholder: |
+        - [ ] Tindakan - @owner - YYYY-MM-DD
+    validations:
+      required: true
+  - type: checkboxes
+    id: reviewed
+    attributes:
+      label: Persetujuan
+      options:
+        - label: PIR telah ditinjau oleh incident owner.
+          required: true

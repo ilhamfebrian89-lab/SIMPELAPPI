@@ -7,6 +7,67 @@
   },
   "item": [
     {
+      "name": "Authentication Setup",
+      "item": [
+        {
+          "name": "Login IPCN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('IPCN login should succeed', function () { pm.response.to.have.status(200); });",
+                  "pm.environment.set('accessToken', pm.response.json().data.accessToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Director",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Director login should succeed', function () { pm.response.to.have.status(200); });",
+                  "pm.environment.set('directorToken', pm.response.json().data.accessToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{directorUsername}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "AUTH-403 Unauthorized Write",
       "item": [
         {
@@ -18,10 +79,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('Status should be 403', function () { pm.response.to.have.status(403); });",
-                  "pm.test('Error code should be AUTH-403', function () {",
-                  "  var jsonData = pm.response.json();",
-                  "  pm.expect(jsonData.errors[0].code).to.eql('AUTH-403');",
-                  "});"
+                  "pm.test('Error code should be AUTH-403', function () { pm.expect(pm.response.json().errors[0].code).to.eql('AUTH-403'); });"
                 ]
               }
             }
@@ -57,10 +115,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('Status should be 400', function () { pm.response.to.have.status(400); });",
-                  "pm.test('Error code should be VAL-001', function () {",
-                  "  var jsonData = pm.response.json();",
-                  "  pm.expect(jsonData.errors[0].code).to.eql('VAL-001');",
-                  "});"
+                  "pm.test('Error code should be VAL-001', function () { pm.expect(pm.response.json().errors[0].code).to.eql('VAL-001'); });"
                 ]
               }
             }
@@ -96,10 +151,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('Status should be 409', function () { pm.response.to.have.status(409); });",
-                  "pm.test('Error code should be BIZ-409', function () {",
-                  "  var jsonData = pm.response.json();",
-                  "  pm.expect(jsonData.errors[0].code).to.eql('BIZ-409');",
-                  "});"
+                  "pm.test('Error code should be BIZ-409', function () { pm.expect(pm.response.json().errors[0].code).to.eql('BIZ-409'); });"
                 ]
               }
             }
@@ -126,6 +178,9 @@
   ],
   "variable": [
     { "key": "baseUrl", "value": "http://localhost:8080/api/v1" },
+    { "key": "username", "value": "ipcn_admin" },
+    { "key": "directorUsername", "value": "director_test" },
+    { "key": "password", "value": "" },
     { "key": "accessToken", "value": "" },
     { "key": "directorToken", "value": "" },
     { "key": "closedRtlId", "value": "77777777-7777-7777-7777-777777777703" }

@@ -1,0 +1,82 @@
+name: Release Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_newman:
+        description: Run Newman against an active API
+        required: true
+        default: false
+        type: boolean
+      base_url:
+        description: API base URL required when Newman is enabled
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  validate-inputs:
+    name: Validate release inputs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate API base URL
+        env:
+          RUN_NEWMAN: ${{ inputs.run_newman }}
+          API_BASE_URL: ${{ inputs.base_url }}
+        run: |
+          if [[ "${RUN_NEWMAN}" == "true" && -z "${API_BASE_URL}" ]]; then
+            echo "::error::base_url is required when run_newman is enabled."
+            exit 1
+          fi
+
+  sql:
+    name: SQL quality gate
+    uses: ./.github/workflows/sql-check.yml
+
+  audit-page:
+    name: Static UI quality gate
+    uses: ./.github/workflows/audit-page-check.yml
+
+  backend:
+    name: Backend quality gate
+    uses: ./.github/workflows/backend-check.yml
+
+  newman:
+    name: API quality gate
+    if: inputs.run_newman
+    needs: validate-inputs
+    uses: ./.github/workflows/newman.yml
+    secrets:
+      test_password: ${{ secrets.SIMPELAPPI_TEST_PASSWORD }}
+    with:
+      base_url: ${{ inputs.base_url }}
+
+  release-summary:
+    name: Release gate result
+    if: always()
+    needs:
+      - validate-inputs
+      - sql
+      - audit-page
+      - backend
+      - newman
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce gate results
+        env:
+          INPUT_RESULT: ${{ needs.validate-inputs.result }}
+          SQL_RESULT: ${{ needs.sql.result }}
+          AUDIT_RESULT: ${{ needs.audit-page.result }}
+          BACKEND_RESULT: ${{ needs.backend.result }}
+          NEWMAN_RESULT: ${{ needs.newman.result }}
+          RUN_NEWMAN: ${{ inputs.run_newman }}
+        run: |
+          test "${INPUT_RESULT}" = "success"
+          test "${SQL_RESULT}" = "success"
+          test "${AUDIT_RESULT}" = "success"
+          test "${BACKEND_RESULT}" = "success"
+          if [[ "${RUN_NEWMAN}" == "true" ]]; then
+            test "${NEWMAN_RESULT}" = "success"
+          fi

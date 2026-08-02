@@ -1,0 +1,65 @@
+name: SQL Migration Check
+
+on:
+  push:
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-migrations:
+    name: Validate migrations
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: simpelappi
+          POSTGRES_USER: simpelappi
+          POSTGRES_PASSWORD: simpelappi_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U simpelappi -d simpelappi"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGDATABASE: simpelappi
+      PGUSER: simpelappi
+      PGPASSWORD: simpelappi_ci
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Apply migrations
+        shell: bash
+        run: |
+          set -euo pipefail
+          for migration in database/migrations/*.sql; do
+            echo "Applying ${migration}"
+            psql -v ON_ERROR_STOP=1 -f "${migration}"
+          done
+
+      - name: Apply rollbacks
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r rollback; do
+            echo "Applying ${rollback}"
+            psql -v ON_ERROR_STOP=1 -f "${rollback}"
+          done < <(find database/rollback -maxdepth 1 -name 'R*.sql' -type f | sort -r)
+
+      - name: Verify migrations can be reapplied
+        shell: bash
+        run: |
+          set -euo pipefail
+          for migration in database/migrations/*.sql; do
+            echo "Reapplying ${migration}"
+            psql -v ON_ERROR_STOP=1 -f "${migration}"
+          done

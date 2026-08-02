@@ -1506,6 +1506,258 @@ textarea {
   color: var(--text);
 }
 
+.isolation-progress {
+  min-width: 132px;
+  display: grid;
+  justify-items: center;
+  padding: 12px 18px;
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.isolation-progress strong {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.isolation-progress span {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.isolation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 18px;
+  align-items: start;
+}
+
+.isolation-form-panel {
+  padding: 0;
+  overflow: hidden;
+}
+
+.isolation-mode-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+  background: #f8fafc;
+}
+
+.isolation-mode-tab {
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.isolation-mode-tab.active {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.2);
+}
+
+#isolationAssessmentForm {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+}
+
+.form-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.form-section-head h3 {
+  margin: 2px 0 0;
+}
+
+.isolation-score {
+  min-width: 86px;
+  display: grid;
+  justify-items: center;
+  padding: 9px 14px;
+  border-radius: 14px;
+  background: #ecfdf5;
+  color: #166534;
+}
+
+.isolation-score strong {
+  font-size: 1.5rem;
+}
+
+.isolation-score span {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.form-section {
+  min-width: 0;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.form-section legend {
+  padding: 0 8px;
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.form-section-description {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.isolation-field-grid,
+.isolation-text-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.isolation-assessment-list {
+  display: grid;
+  gap: 10px;
+}
+
+.isolation-assessment-item {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 160px;
+  gap: 12px;
+  align-items: start;
+  padding: 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 13px;
+  background: #f8fafc;
+}
+
+.assessment-item-number {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.assessment-item-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.assessment-item-copy strong {
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.assessment-item-copy textarea {
+  min-height: 66px;
+  resize: vertical;
+  background: #ffffff;
+}
+
+.signature-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.signature-pad-wrap {
+  display: grid;
+  gap: 7px;
+}
+
+.signature-pad-wrap p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.signature-pad {
+  width: 100%;
+  height: 180px;
+  border: 1px dashed #64748b;
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.signature-details {
+  display: grid;
+  gap: 14px;
+}
+
+.isolation-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.isolation-form-actions > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.isolation-summary-panel {
+  position: sticky;
+  top: 18px;
+}
+
+.isolation-history {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.isolation-history li {
+  display: grid;
+  gap: 4px;
+  padding: 11px;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.isolation-history strong {
+  font-size: 0.79rem;
+  line-height: 1.4;
+}
+
+.isolation-history span,
+.isolation-history small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.isolation-history .isolation-history-empty {
+  color: var(--muted);
+  text-align: center;
+}
+
 @media (max-width: 920px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -1554,6 +1806,14 @@ textarea {
   .bar-chart {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     height: auto;
+  }
+
+  .isolation-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .isolation-summary-panel {
+    position: static;
   }
 }
 
@@ -1825,5 +2085,28 @@ textarea {
 
   .audit-item {
     grid-template-columns: 1fr;
+  }
+
+  #isolationAssessmentForm {
+    padding: 14px;
+  }
+
+  .isolation-field-grid,
+  .isolation-text-grid,
+  .signature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .isolation-assessment-item {
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+
+  .isolation-assessment-item > select {
+    grid-column: 1 / -1;
+  }
+
+  .isolation-form-actions {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

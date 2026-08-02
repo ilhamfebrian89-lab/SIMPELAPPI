@@ -1,0 +1,28 @@
+name: Audit Page Check
+
+on:
+  push:
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-audit-page:
+    name: Validate audit page
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check shell.js
+          node --check audit.js
+          node --check monitoring.js
+
+      - name: Run static audit page checks
+        shell: pwsh
+        run: ./scripts/validate-audit-page.ps1

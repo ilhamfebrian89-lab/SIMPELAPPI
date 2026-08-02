@@ -22,10 +22,12 @@ Dokumen ini menjadi acuan konfigurasi branch protection pada repository agar pro
 ### B. Status Checks
 
 - [ ] Require status checks to pass before merging
-- [ ] Wajib lulus workflow `SQL Migration Check`
-- [ ] Wajib lulus workflow `Newman API Tests`
-- [ ] Wajib lulus workflow `Release Gate`
+- [ ] Wajib lulus check `Validate migrations`
+- [ ] Wajib lulus check `Validate audit page`
+- [ ] Wajib lulus check `Validate backend`
 - [ ] Require branches to be up to date before merging
+
+`Newman API Tests` dan `Release Gate` saat ini dijalankan manual karena repository belum menyediakan API yang dapat dimulai oleh CI. Setelah backend tersedia, tambahkan Newman sebagai required check menggunakan environment pengujian khusus.
 
 ### C. Restriction Rules
 
@@ -64,3 +66,14 @@ Frekuensi minimal bulanan:
 - validasi workflow masih aktif
 - validasi rule protection tidak berubah tanpa persetujuan
 - validasi tidak ada bypass merge tanpa approval
+
+## Template Ruleset
+
+File `.github/branch-protection-ruleset-example.json` menyediakan baseline untuk default branch dengan:
+
+- pull request dan minimal satu approval
+- penyelesaian seluruh review thread
+- blokir force push dan penghapusan branch
+- required checks `Validate migrations`, `Validate audit page`, dan `Validate backend`
+
+Tinjau kembali actor bypass, reviewer, dan metode merge sebelum ruleset diaktifkan.

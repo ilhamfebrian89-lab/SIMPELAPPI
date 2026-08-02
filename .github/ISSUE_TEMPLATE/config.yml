@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Insiden darurat
+    url: https://github.com/ilhamfebrian89-lab/SIMPELAPPI/security/advisories/new
+    about: Gunakan security advisory untuk kerentanan atau insiden keamanan yang belum boleh dipublikasikan.

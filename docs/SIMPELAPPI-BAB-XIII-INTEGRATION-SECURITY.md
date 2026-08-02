@@ -61,6 +61,7 @@ Setiap payload integrasi wajib memiliki:
 - role_code
 - unit_id
 - scope
+- token_version untuk revocation setelah rotasi kredensial
 - exp, iat, jti
 
 ## 13.5 Authorization Model

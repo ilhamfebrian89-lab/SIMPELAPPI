@@ -72,5 +72,7 @@ Prototype ini dibuat sebagai acuan awal untuk:
 - UI designer
 - frontend developer
 - backend developer
+
+Halaman Kewaspadaan Isolasi menyediakan mode audit dan supervisi untuk 14 kategori standar. Daftar kategori disimpan terpusat pada `monitoring.js` agar dapat diganti dengan nomenklatur resmi rumah sakit tanpa mengubah struktur formulir.
 - QA
 - product manager

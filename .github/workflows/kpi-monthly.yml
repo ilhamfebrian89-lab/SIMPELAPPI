@@ -1,0 +1,76 @@
+name: KPI Monthly Pipeline
+
+on:
+  schedule:
+    - cron: "0 1 2 * *"
+  workflow_dispatch:
+    inputs:
+      period_month:
+        description: Reporting period in YYYY-MM format; defaults to the previous month
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build-kpi-evidence:
+    name: Build KPI evidence
+    runs-on: ubuntu-latest
+    env:
+      PGHOST: ${{ secrets.SIMPELAPPI_DB_HOST }}
+      PGPORT: ${{ secrets.SIMPELAPPI_DB_PORT }}
+      PGDATABASE: ${{ secrets.SIMPELAPPI_DB_NAME }}
+      PGUSER: ${{ secrets.SIMPELAPPI_DB_USER }}
+      PGPASSWORD: ${{ secrets.SIMPELAPPI_DB_PASSWORD }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Resolve reporting period
+        shell: pwsh
+        env:
+          REQUESTED_PERIOD: ${{ inputs.period_month }}
+        run: |
+          $period = $env:REQUESTED_PERIOD
+          if (-not $period) {
+            $period = (Get-Date).ToUniversalTime().AddMonths(-1).ToString("yyyy-MM")
+          }
+          if ($period -notmatch "^\d{4}-\d{2}$") {
+            throw "period_month must use YYYY-MM format."
+          }
+          "PERIOD_MONTH=$period" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Validate database configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          for variable in PGHOST PGPORT PGDATABASE PGUSER PGPASSWORD; do
+            if [[ -z "${!variable}" ]]; then
+              echo "::error::Missing database secret for ${variable}."
+              exit 1
+            fi
+          done
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
+
+      - name: Build monthly KPI evidence
+        shell: pwsh
+        run: >
+          ./scripts/run-kpi-monthly-pipeline.ps1
+          -PeriodMonth $env:PERIOD_MONTH
+          -DbHost $env:PGHOST
+          -DbPort $env:PGPORT
+          -DbName $env:PGDATABASE
+          -DbUser $env:PGUSER
+
+      - name: Upload KPI evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: kpi-evidence-${{ env.PERIOD_MONTH }}
+          path: evidence/kpi/${{ env.PERIOD_MONTH }}/
+          if-no-files-found: error
+          retention-days: 90
