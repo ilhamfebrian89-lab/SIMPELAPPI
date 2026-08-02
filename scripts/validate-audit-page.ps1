@@ -10,6 +10,7 @@ $auditJs = Join-Path $resolvedRoot 'audit.js'
 $bundlesHtml = Join-Path $resolvedRoot 'bundles-hais.html'
 $monitoringHtml = Join-Path $resolvedRoot 'monitoring.html'
 $monitoringJs = Join-Path $resolvedRoot 'monitoring.js'
+$isolationCategoriesJs = Join-Path $resolvedRoot 'isolation-categories.js'
 $shellJs = Join-Path $resolvedRoot 'shell.js'
 $stylesCss = Join-Path $resolvedRoot 'styles.css'
 
@@ -41,6 +42,7 @@ Assert-FileExists -PathToCheck $auditJs
 Assert-FileExists -PathToCheck $bundlesHtml
 Assert-FileExists -PathToCheck $monitoringHtml
 Assert-FileExists -PathToCheck $monitoringJs
+Assert-FileExists -PathToCheck $isolationCategoriesJs
 Assert-FileExists -PathToCheck $shellJs
 Assert-FileExists -PathToCheck $stylesCss
 
@@ -66,10 +68,13 @@ Assert-Contains -PathToCheck $bundlesHtml -Pattern 'href="index\.html"' -Descrip
 Assert-Contains -PathToCheck $shellJs -Pattern "href: 'bundles-hais\.html'.*label: 'Bundles HAIs'" -Description 'Bundles HAIs menu destination'
 
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<script src="monitoring\.js" defer></script>' -Description 'monitoring form script'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<script src="isolation-categories\.js" defer></script>' -Description 'isolation category configuration script'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="isolationAssessmentForm"' -Description 'isolation assessment form'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="auditorSignature"' -Description 'digital signature canvas'
-Assert-Contains -PathToCheck $monitoringJs -Pattern 'const isolationCategories = \[' -Description 'isolation category configuration'
-Assert-Contains -PathToCheck $monitoringJs -Pattern 'id: \x27transport\x27' -Description 'fourteenth isolation category'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'window\.simpelappiIsolationCategories' -Description 'isolation category configuration'
+Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'parsedIsolationCategories\.length !== 29' -Description '29 isolation category integrity check'
+Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'isolationAssessmentItemCount !== 284' -Description '284 assessment item integrity check'
+Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'Transportasi Limbah Medis ke Pihak Ketiga' -Description 'final isolation category'
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureCanvas\.toDataURL' -Description 'digital signature capture'
 
 Assert-Contains -PathToCheck $stylesCss -Pattern '\.autosave-activity\.is-active::after' -Description 'autosave animation'
