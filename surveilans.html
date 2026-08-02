@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <script src="shell.js" defer></script>
+    <script src="surveilans.js" defer></script>
   </head>
   <body>
     <div class="dashboard-shell">
@@ -27,7 +28,7 @@
           <a class="side-menu-item" href="index.html"><span class="side-menu-icon">⌂</span><span>Dashboard</span></a>
           <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◌</span><span>Kewaspadaan Isolasi</span><span class="side-menu-caret">⌄</span></a>
           <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">▣</span><span>Bundles HAIs</span><span class="side-menu-caret">⌄</span></a>
-          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans</span><span class="side-menu-caret">⌄</span></a>
           <a class="side-menu-item" href="rtl.html"><span class="side-menu-icon">✦</span><span>PPRA / RTL</span><span class="side-menu-caret">⌄</span></a>
           <a class="side-menu-item" href="notification.html"><span class="side-menu-icon">☍</span><span>Logbook IPCN</span></a>
           <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☌</span><span>Laporan</span></a>
@@ -48,50 +49,196 @@
           </div>
         </header>
 
-        <section class="workspace-head">
-          <div>
-            <p class="eyebrow">Surveilans HAI</p>
-            <h3>Form Kasus Infeksi</h3>
-            <p class="workspace-subtitle">Pencatatan kasus HAI, kultur, dan outcome pasien per unit</p>
-          </div>
-          <div class="workspace-filters">
-            <label class="filter-chip"><span>📅</span><select aria-label="Periode surveilans"><option>Juni 2026</option><option>Juli 2026</option><option>Agustus 2026</option></select></label>
-            <label class="filter-chip"><span>▾</span><select aria-label="Unit surveilans"><option>ICU</option><option>IGD</option><option>Rawat Inap</option></select></label>
-            <a class="btn btn-primary btn-export" href="report.html">⬇ Ekspor Kasus</a>
-          </div>
-        </section>
-
-        <section class="metric-grid monitor-metric-grid">
-          <article class="metric-card metric-red"><div class="metric-icon">✹</div><div><p>Kasus Aktif</p><strong>6</strong><span>2 kasus baru minggu ini</span></div></article>
-          <article class="metric-card metric-blue"><div class="metric-icon">🧪</div><div><p>Kultur Positif</p><strong>4</strong><span>67% dari total kasus</span></div></article>
-          <article class="metric-card metric-green"><div class="metric-icon">✓</div><div><p>Closed Case</p><strong>11</strong><span>Follow up lengkap</span></div></article>
-        </section>
-
-        <section class="dashboard-grid monitor-board">
-          <article class="panel panel-span-2 form-card">
-            <div class="section-title"><h3>Identitas Pasien</h3></div>
-            <div class="field-row"><label>Nama Pasien</label><input type="text" title="Nama Pasien" value="Ayu Lestari" /></div>
-            <div class="field-row"><label>MRN</label><input type="text" title="MRN" value="MRN-20481" /></div>
-            <div class="field-row"><label>Ruangan</label><select title="Ruangan"><option>ICU</option></select></div>
-          </article>
-          <article class="panel form-card">
-            <div class="section-title"><h3>Diagnosis</h3></div>
-            <textarea rows="5" title="Diagnosis">Pneumonia nosokomial, ventilator-associated event.</textarea>
-          </article>
-          <article class="panel panel-span-2 form-card">
-            <div class="section-title"><h3>HAI & Kultur</h3></div>
-            <div class="field-row"><label>Jenis HAI</label><select title="Jenis HAI"><option>VAP</option></select></div>
-            <div class="field-row"><label>Hasil Kultur</label><input type="text" title="Hasil Kultur" value="Klebsiella pneumoniae" /></div>
-            <div class="field-row"><label>Outcome</label><select title="Outcome"><option>Recovered</option></select></div>
-          </article>
-          <article class="panel form-card">
-            <div class="section-title"><h3>Catatan</h3></div>
-            <textarea rows="4" title="Catatan">Pelaporan dikirim ke IPCN dan unit terkait untuk evaluasi tindak lanjut.</textarea>
-            <div class="action-row">
-              <button class="btn btn-secondary">Simpan Draft</button>
-              <button class="btn btn-primary">Save</button>
+        <section class="panel surveillance-entry-panel">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Form Surveilans Lengkap</p>
+              <h3>Input Data Surveilans</h3>
             </div>
-          </article>
+          </div>
+          <div class="inline-alert" id="surveillanceAlert" role="status" aria-live="polite"></div>
+
+          <form id="surveillanceForm" novalidate>
+            <fieldset class="form-section">
+              <legend>A. Identitas Pasien</legend>
+              <div class="surveillance-form-grid">
+                <div class="field-row"><label for="surveillanceMrn">Nomor Rekam Medis</label><input id="surveillanceMrn" name="mrn" type="text" maxlength="50" required /></div>
+                <div class="field-row"><label for="surveillancePatientName">Nama Pasien</label><input id="surveillancePatientName" name="fullName" type="text" maxlength="200" required /></div>
+                <div class="field-row"><label for="surveillanceBirthDate">Tanggal Lahir</label><input id="surveillanceBirthDate" name="birthDate" type="date" /></div>
+                <div class="field-row"><label for="surveillanceAge">Umur</label><input id="surveillanceAge" name="ageYears" type="number" min="0" max="150" readonly /></div>
+                <div class="field-row"><label for="surveillanceSex">Jenis Kelamin</label><select id="surveillanceSex" name="sex"><option value="">Pilih jenis kelamin</option><option value="male">Laki-laki</option><option value="female">Perempuan</option></select></div>
+                <div class="field-row">
+                  <label for="surveillanceUnit">Unit</label>
+                  <select id="surveillanceUnit" name="unitName" required>
+                    <option value="">Pilih unit</option>
+                    <option>Instalasi Gawat Darurat</option><option>Instalasi Kamar Bedah</option><option>Instalasi Rawat Jalan</option>
+                    <option>Instalasi Rawat Inap</option><option>Instalasi Eksekutif</option><option>HCU</option><option>One Day Care (ODC)</option>
+                    <option>Instalasi CSSD dan Laundry/Binatu</option><option>Instalasi Gizi</option><option>Instalasi Laboratorium</option>
+                    <option>Instalasi Farmasi</option><option>Instalasi Radiologi</option><option>Instalasi Rekam Medis</option><option>Ambulans</option>
+                    <option>Kamar Jenazah</option><option>Instalasi Kesehatan Lingkungan/Housekeeping</option><option>IPSRS</option><option>Bank Mata</option>
+                  </select>
+                </div>
+                <div class="field-row"><label for="surveillanceRoom">Ruangan</label><input id="surveillanceRoom" name="roomName" type="text" maxlength="200" /></div>
+                <div class="field-row"><label for="surveillanceDpjp">DPJP</label><input id="surveillanceDpjp" name="attendingPhysician" type="text" maxlength="200" /></div>
+                <div class="field-row"><label for="surveillanceAdmissionDate">Tanggal Masuk RS</label><input id="surveillanceAdmissionDate" name="admissionDate" type="date" /></div>
+                <div class="field-row"><label for="surveillanceStartDate">Tanggal Mulai Surveilans</label><input id="surveillanceStartDate" name="surveillanceStartDate" type="date" required /></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+              <legend>B. Jenis Surveilans</legend>
+              <div class="surveillance-form-grid">
+                <div class="field-row">
+                  <label for="surveillanceType">Jenis Surveilans</label>
+                  <select id="surveillanceType" name="surveillanceType" required>
+                    <option value="">Pilih jenis surveilans</option>
+                    <option value="hais">HAIs</option>
+                    <option value="tuberculosis">Tuberkulosis (TB)</option>
+                    <option value="hiv_aids">HIV/AIDS</option>
+                    <option value="outbreak">Penyakit Infeksi Berpotensi Wabah/KLB</option>
+                    <option value="other">Infeksi Lainnya</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="surveillance-dynamic-section" data-surveillance-section="hais" hidden>
+                <div class="section-title"><h4>Detail HAIs</h4></div>
+                <div class="surveillance-form-grid">
+                  <div class="field-row"><label for="surveillanceHaiType">Jenis HAIs</label><select id="surveillanceHaiType" name="surveillanceSubtype" data-dynamic-required><option value="">Pilih jenis HAIs</option><option>IDO</option><option>VAP</option><option>CLABSI</option><option>CAUTI</option><option>IADP</option><option>Endophthalmitis</option></select></div>
+                </div>
+              </div>
+
+              <div class="surveillance-dynamic-section" data-surveillance-section="tuberculosis" hidden>
+                <div class="section-title"><h4>Detail Tuberkulosis</h4></div>
+                <div class="surveillance-form-grid">
+                  <div class="field-row"><label>Status TB</label><select name="tbStatus" data-dynamic-required><option value="">Pilih status</option><option>Suspek</option><option>Terkonfirmasi</option><option>Sensitif Obat</option><option>TB RO/MDR</option></select></div>
+                  <div class="field-row"><label>GeneXpert</label><input name="tbGeneXpert" type="text" /></div>
+                  <div class="field-row"><label>BTA</label><input name="tbBta" type="text" /></div>
+                  <div class="field-row"><label>Kultur</label><input name="tbCulture" type="text" /></div>
+                  <div class="field-row"><label>Foto Thoraks</label><input name="tbChestXray" type="text" /></div>
+                  <div class="field-row"><label>Tanggal Mulai OAT</label><input name="tbOatStartDate" type="date" /></div>
+                  <div class="field-row"><label>Regimen OAT</label><input name="tbOatRegimen" type="text" /></div>
+                  <div class="field-row"><label>DOTS</label><select name="tbDots"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option><option value="not_applicable">Tidak Berlaku</option></select></div>
+                  <div class="field-row"><label>Pelaporan SITB</label><select name="tbSitbReporting"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option><option value="not_applicable">Tidak Berlaku</option></select></div>
+                </div>
+              </div>
+
+              <div class="surveillance-dynamic-section" data-surveillance-section="hiv_aids" hidden>
+                <div class="section-title"><h4>Detail HIV/AIDS</h4></div>
+                <div class="surveillance-form-grid">
+                  <div class="field-row"><label>Status HIV</label><input name="hivStatus" type="text" data-dynamic-required /></div>
+                  <div class="field-row"><label>Rapid Test</label><input name="hivRapidTest" type="text" /></div>
+                  <div class="field-row"><label>ELISA</label><input name="hivElisa" type="text" /></div>
+                  <div class="field-row"><label>Viral Load</label><input name="hivViralLoad" type="text" /></div>
+                  <div class="field-row"><label>CD4</label><input name="hivCd4" type="text" /></div>
+                  <div class="field-row"><label>ART</label><select name="hivArt"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option><option value="not_applicable">Tidak Berlaku</option></select></div>
+                  <div class="field-row"><label>Profilaksis OI</label><select name="hivOiProphylaxis"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option><option value="not_applicable">Tidak Berlaku</option></select></div>
+                  <div class="field-row"><label>Konseling HIV</label><select name="hivCounseling"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option><option value="not_applicable">Tidak Berlaku</option></select></div>
+                </div>
+              </div>
+
+              <div class="surveillance-dynamic-section" data-surveillance-section="outbreak" hidden>
+                <div class="section-title"><h4>Detail Wabah/KLB</h4></div>
+                <div class="surveillance-form-grid">
+                  <div class="field-row">
+                    <label>Jenis Penyakit</label>
+                    <select name="outbreakDisease" data-dynamic-required>
+                      <option value="">Pilih penyakit</option><option>COVID-19</option><option>TB</option><option>Campak</option><option>Rubella</option><option>Difteri</option><option>Pertusis</option><option>DBD</option><option>Chikungunya</option><option>Kolera</option><option>Hepatitis A</option><option>Hepatitis E</option><option>Leptospirosis</option><option>Mpox</option><option>Influenza Avian</option><option>MERS</option><option>SARS</option><option>Meningitis</option><option>Rabies</option><option>Antraks</option><option>Polio</option><option>Ebola</option><option>Marburg</option><option>Lainnya</option>
+                    </select>
+                  </div>
+                  <div class="field-row"><label>Status Kasus</label><select name="outbreakCaseStatus" data-dynamic-required><option value="">Pilih status</option><option>Suspek</option><option>Probable</option><option>Terkonfirmasi</option></select></div>
+                  <div class="field-row"><label>Tanggal Onset</label><input name="outbreakOnsetDate" type="date" /></div>
+                  <div class="field-row"><label>Riwayat Perjalanan</label><textarea name="outbreakTravelHistory" rows="3"></textarea></div>
+                  <div class="field-row"><label>Riwayat Kontak</label><textarea name="outbreakContactHistory" rows="3"></textarea></div>
+                  <div class="field-row"><label>Riwayat Paparan</label><textarea name="outbreakExposureHistory" rows="3"></textarea></div>
+                  <div class="field-row"><label>Pemeriksaan Laboratorium</label><textarea name="outbreakLaboratory" rows="3"></textarea></div>
+                  <div class="field-row"><label>PCR / GeneXpert</label><input name="outbreakPcrGeneXpert" type="text" /></div>
+                  <div class="field-row"><label>Radiologi</label><input name="outbreakRadiology" type="text" /></div>
+                  <div class="field-row"><label>Jenis Kewaspadaan</label><select name="outbreakPrecautionType"><option value="">Pilih kewaspadaan</option><option>Standar</option><option>Kontak</option><option>Droplet</option><option>Airborne</option></select></div>
+                  <div class="field-row"><label>Penempatan Isolasi</label><input name="outbreakIsolationPlacement" type="text" /></div>
+                  <div class="field-row"><label>Pelaporan Tim PPI</label><select name="outbreakPpiReporting"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option></select></div>
+                  <div class="field-row"><label>Pelaporan SKDR</label><select name="outbreakSkdrReporting"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option></select></div>
+                  <div class="field-row"><label>Pelaporan Dinas Kesehatan</label><select name="outbreakHealthOfficeReporting"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option></select></div>
+                  <div class="field-row"><label>Investigasi Kontak</label><select name="outbreakContactInvestigation"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option></select></div>
+                </div>
+              </div>
+
+              <div class="surveillance-dynamic-section" data-surveillance-section="other" hidden>
+                <div class="section-title"><h4>Detail Infeksi Lainnya</h4></div>
+                <div class="surveillance-form-grid">
+                  <div class="field-row"><label>Nama Infeksi</label><input name="otherInfectionName" type="text" data-dynamic-required /></div>
+                  <div class="field-row"><label>Detail Infeksi</label><textarea name="otherInfectionDetails" rows="3"></textarea></div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+              <legend>C. Data Klinis</legend>
+              <div class="surveillance-form-grid">
+                <div class="field-row"><label>Diagnosis</label><textarea name="diagnosisText" rows="4" required></textarea></div>
+                <div class="field-row"><label>Gejala Klinis</label><textarea name="clinicalSymptoms" rows="4"></textarea></div>
+                <div class="field-row"><label>Faktor Risiko</label><textarea name="riskFactors" rows="4"></textarea></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+              <legend>D. Pemeriksaan Penunjang</legend>
+              <div class="surveillance-form-grid">
+                <div class="field-row"><label>Laboratorium</label><textarea name="supportLaboratory" rows="3"></textarea></div>
+                <div class="field-row"><label>Kultur</label><textarea name="supportCulture" rows="3"></textarea></div>
+                <div class="field-row"><label>Radiologi</label><textarea name="supportRadiology" rows="3"></textarea></div>
+                <div class="field-row"><label>Pemeriksaan Lainnya</label><textarea name="supportOther" rows="3"></textarea></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+              <legend>E. Pencegahan dan Pengendalian Infeksi</legend>
+              <div class="surveillance-form-grid">
+                <div class="field-row"><label>Jenis Kewaspadaan</label><select name="infectionPrecautionType"><option value="">Pilih kewaspadaan</option><option>Standar</option><option>Kontak</option><option>Droplet</option><option>Airborne</option></select></div>
+                <div class="field-row"><label>Penempatan Isolasi</label><input name="infectionIsolationPlacement" type="text" /></div>
+                <div class="field-row"><label>Kebersihan Tangan</label><select name="infectionHandHygiene"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option><option value="not_applicable">Tidak Berlaku</option></select></div>
+                <div class="field-row"><label>Penggunaan APD</label><select name="infectionPpeUse"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option><option value="not_applicable">Tidak Berlaku</option></select></div>
+                <div class="field-row"><label>Edukasi Pasien</label><select name="infectionPatientEducation"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option><option value="not_applicable">Tidak Berlaku</option></select></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+              <legend>F. Pelaporan</legend>
+              <div class="surveillance-form-grid">
+                <div class="field-row"><label>Tim PPI</label><select name="reportPpiTeam"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option></select></div>
+                <div class="field-row"><label>PPRA</label><select name="reportPpra"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option></select></div>
+                <div class="field-row"><label>SKDR</label><select name="reportSkdr"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option></select></div>
+                <div class="field-row"><label>Dinas Kesehatan</label><select name="reportHealthOffice"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option></select></div>
+                <div class="field-row"><label>Investigasi Kontak</label><select name="reportContactInvestigation"><option value="">Pilih status</option><option value="yes">Ya</option><option value="no">Tidak</option></select></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+              <legend>G. Outcome</legend>
+              <div class="surveillance-form-grid">
+                <div class="field-row"><label for="surveillanceOutcome">Outcome Pasien</label><select id="surveillanceOutcome" name="outcome"><option value="">Pilih outcome</option><option value="hospitalized">Masih Dirawat</option><option value="discharged">Pulang</option><option value="referred">Dirujuk</option><option value="deceased">Meninggal</option></select></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+              <legend>H. Verifikasi IPCN</legend>
+              <div class="surveillance-form-grid">
+                <div class="field-row"><label>Nama IPCN</label><input name="verificationIpcnName" type="text" maxlength="200" /></div>
+                <div class="field-row"><label>Tanggal Verifikasi</label><input name="verificationDate" type="date" /></div>
+                <div class="field-row"><label>Kesimpulan</label><textarea name="verificationConclusion" rows="3"></textarea></div>
+                <div class="field-row"><label>Catatan</label><textarea name="verificationNotes" rows="3"></textarea></div>
+              </div>
+            </fieldset>
+
+            <div class="isolation-form-actions">
+              <p id="surveillanceDraftStatus">Draft belum disimpan.</p>
+              <div class="action-row">
+                <button class="btn btn-secondary" id="resetSurveillanceFormButton" type="button">Reset</button>
+                <button class="btn btn-secondary" id="saveSurveillanceDraftButton" type="button">Simpan Draft</button>
+                <button class="btn btn-primary" type="submit">Simpan Data Surveilans</button>
+              </div>
+            </div>
+          </form>
         </section>
       </main>
     </div>

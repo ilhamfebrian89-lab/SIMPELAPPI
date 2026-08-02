@@ -7,8 +7,11 @@ $ErrorActionPreference = 'Stop'
 $resolvedRoot = (Resolve-Path $RootPath).Path
 $auditHtml = Join-Path $resolvedRoot 'audit.html'
 $auditJs = Join-Path $resolvedRoot 'audit.js'
+$bundlesHtml = Join-Path $resolvedRoot 'bundles-hais.html'
 $monitoringHtml = Join-Path $resolvedRoot 'monitoring.html'
 $monitoringJs = Join-Path $resolvedRoot 'monitoring.js'
+$isolationCategoriesJs = Join-Path $resolvedRoot 'isolation-categories.js'
+$shellJs = Join-Path $resolvedRoot 'shell.js'
 $stylesCss = Join-Path $resolvedRoot 'styles.css'
 
 function Assert-FileExists {
@@ -36,8 +39,11 @@ Write-Host '[SIMPELAPPI] Validating audit page files...' -ForegroundColor Cyan
 
 Assert-FileExists -PathToCheck $auditHtml
 Assert-FileExists -PathToCheck $auditJs
+Assert-FileExists -PathToCheck $bundlesHtml
 Assert-FileExists -PathToCheck $monitoringHtml
 Assert-FileExists -PathToCheck $monitoringJs
+Assert-FileExists -PathToCheck $isolationCategoriesJs
+Assert-FileExists -PathToCheck $shellJs
 Assert-FileExists -PathToCheck $stylesCss
 
 Assert-Contains -PathToCheck $auditHtml -Pattern '<script src="audit\.js"></script>' -Description 'external audit.js include'
@@ -54,12 +60,43 @@ Assert-Contains -PathToCheck $auditJs -Pattern 'restoreResetSnapshotFromSession\
 Assert-Contains -PathToCheck $auditJs -Pattern 'window\.addEventListener\(\x27pagehide\x27, handlePageHide\)' -Description 'pagehide flush handler'
 Assert-Contains -PathToCheck $auditJs -Pattern 'success-state\.html' -Description 'success redirect target'
 
+Assert-Contains -PathToCheck $bundlesHtml -Pattern 'const DEFAULT_BUNDLES = \[' -Description 'Bundles HAIs configuration'
+Assert-Contains -PathToCheck $bundlesHtml -Pattern 'all-or-none' -Description 'all-or-none compliance calculation'
+Assert-Contains -PathToCheck $bundlesHtml -Pattern 'const MENU=\[\["dashboard","Dashboard"\],\["input","Input Audit"\],\["riwayat","Riwayat"\],\["laporan","Laporan"\],\["pengaturan","Pengaturan"\]\]' -Description 'five Bundles HAIs views'
+Assert-Contains -PathToCheck $bundlesHtml -Pattern 'localStorage\.setItem' -Description 'local audit persistence'
+Assert-Contains -PathToCheck $bundlesHtml -Pattern 'href="index\.html"' -Description 'SIMPELAPPI return link'
+Assert-Contains -PathToCheck $shellJs -Pattern "href: 'bundles-hais\.html'.*label: 'Bundles HAIs'" -Description 'Bundles HAIs menu destination'
+
 Assert-Contains -PathToCheck $monitoringHtml -Pattern '<script src="monitoring\.js" defer></script>' -Description 'monitoring form script'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<script src="isolation-categories\.js" defer></script>' -Description 'isolation category configuration script'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="isolationAssessmentForm"' -Description 'isolation assessment form'
 Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="auditorSignature"' -Description 'digital signature canvas'
-Assert-Contains -PathToCheck $monitoringJs -Pattern 'const isolationCategories = \[' -Description 'isolation category configuration'
-Assert-Contains -PathToCheck $monitoringJs -Pattern 'id: \x27transport\x27' -Description 'fourteenth isolation category'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="signatureLocationDate"' -Description 'signature location and date'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="signatureAuditorName".*readonly' -Description 'automatic read-only auditor signature name'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="findingPhotoCamera".*capture="environment"' -Description 'finding photo camera input'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="findingPhotoUpload".*multiple' -Description 'finding photo upload input'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="findingPhotoCount">0 foto' -Description 'finding photo counter'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="saveIsolationDraftButton"[\s\S]*id="saveIsolationPdfButton"[\s\S]*type="submit"' -Description 'draft, PDF, and submit button order'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Instalasi Gawat Darurat</option>' -Description 'first hospital unit'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Bank Mata</option>' -Description 'final hospital unit'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="isolationProfession".*name="profession".*required' -Description 'required profession selector'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Dokter</option>' -Description 'first profession'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<option>Lainnya</option>' -Description 'final profession'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'window\.simpelappiIsolationCategories' -Description 'isolation category configuration'
+Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'parsedIsolationCategories\.length !== 29' -Description '29 isolation category integrity check'
+Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'isolationAssessmentItemCount !== 284' -Description '284 assessment item integrity check'
+Assert-Contains -PathToCheck $isolationCategoriesJs -Pattern 'Transportasi Limbah Medis ke Pihak Ketiga' -Description 'final isolation category'
 Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureCanvas\.toDataURL' -Description 'digital signature capture'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureLocationDate\.textContent = `Bandung, \$\{formattedDate\}`' -Description 'dynamic Bandung signature date'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureNameInput\.value = auditorInput\.value' -Description 'automatic auditor signature name'
+Assert-Contains -PathToCheck $monitoringJs -Pattern "canvas\.toDataURL\('image/jpeg', 0\.6\)" -Description 'automatic finding photo compression'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'photos: findingPhotos\.slice\(\)' -Description 'finding photos persisted with observation'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'profession: form\.elements\.profession\.value' -Description 'profession persisted with observation'
+Assert-Contains -PathToCheck $monitoringJs -Pattern '@page \{ size: 210mm 330mm portrait;' -Description 'F4 portrait print layout'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'const filenameBase = `\$\{modeLabel\}_\$\{toFilenamePart\(categoryName\).*_\$\{filenameDate\}`' -Description 'mode, category, and date PDF filename'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'const filename = `\$\{filenameBase\}\.pdf`' -Description 'PDF filename extension'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'thead \{ display: table-header-group; \}' -Description 'repeating print table header'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'printWindow\.print\(\)' -Description 'browser print preview'
 
 Assert-Contains -PathToCheck $stylesCss -Pattern '\.autosave-activity\.is-active::after' -Description 'autosave animation'
 Assert-Contains -PathToCheck $stylesCss -Pattern 'prefers-reduced-motion: reduce' -Description 'reduced motion support'

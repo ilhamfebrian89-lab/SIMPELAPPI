@@ -94,6 +94,36 @@ describe('SIMPELAPPI API', () => {
     expect(response.json().errors[0].code).toBe('AUTH-403');
   });
 
+  it('requires a HAIs subtype for HAIs surveillance cases', async () => {
+    app = await buildApp({ config, logger: false });
+    const token = app.jwt.sign({
+      sub: '22222222-2222-2222-2222-222222222223',
+      role_code: 'IPCN',
+      unit_id: '11111111-1111-1111-1111-111111111111',
+      scope: ['surveilans:write'],
+      token_version: 0,
+      token_type: 'access'
+    });
+    const response = await app.inject({
+      method: 'POST',
+      url: '/api/v1/surveilans/cases',
+      headers: { authorization: `Bearer ${token}` },
+      payload: {
+        mrn: 'MRN-001',
+        fullName: 'Pasien Uji',
+        unitId: '11111111-1111-1111-1111-111111111111',
+        diagnosisText: 'Diagnosis uji',
+        surveillanceType: 'hais'
+      }
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.json().errors[0]).toMatchObject({
+      code: 'VAL-001',
+      field: 'surveillanceSubtype'
+    });
+  });
+
   it('enforces own-unit dashboard access before querying data', async () => {
     app = await buildApp({ config, logger: false });
     const token = app.jwt.sign({

@@ -27,11 +27,13 @@ Workflow yang memerlukan layanan eksternal dijalankan terpisah:
 ## Struktur File
 
 - `index.html` — dashboard command center utama
-- `login.html` — halaman login
+- `login.html` / `login.js` — halaman login yang menyimpan token autentikasi API
 - `monitoring.html` — form monitoring digital
-- `monitoring.js` — formulir audit dan supervisi 14 jenis kewaspadaan isolasi
+- `monitoring.js` — formulir audit dan supervisi 29 jenis kewaspadaan isolasi
+- `isolation-categories.js` — 284 item penilaian untuk 29 jenis kewaspadaan isolasi
+- `bundles-hais.html` — aplikasi audit Bundles HAIs dengan dashboard, riwayat, laporan, dan pengaturan
 - `audit.html` — form audit digital
-- `surveilans.html` — form surveilans HAI
+- `surveilans.html` / `surveilans.js` — form dinamis Surveilans HAIs, TB, HIV/AIDS, wabah/KLB, dan infeksi lainnya
 - `rtl.html` — task management RTL
 - `report.html` — halaman laporan
 - `notification.html` — notifikasi terpusat

@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <script src="shell.js" defer></script>
+    <script src="isolation-categories.js" defer></script>
     <script src="monitoring.js" defer></script>
   </head>
   <body>
@@ -31,7 +32,7 @@
           <a class="side-menu-item" href="index.html"><span class="side-menu-icon">⌂</span><span>Dashboard</span></a>
           <a class="side-menu-item" href="monitoring.html"><span class="side-menu-icon">◌</span><span>Kewaspadaan Isolasi</span><span class="side-menu-caret">⌄</span></a>
           <a class="side-menu-item" href="audit.html"><span class="side-menu-icon">▣</span><span>Bundles HAIs</span><span class="side-menu-caret">⌄</span></a>
-          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans HAIs</span><span class="side-menu-caret">⌄</span></a>
+          <a class="side-menu-item" href="surveilans.html"><span class="side-menu-icon">⟡</span><span>Surveilans</span><span class="side-menu-caret">⌄</span></a>
           <a class="side-menu-item" href="rtl.html"><span class="side-menu-icon">✦</span><span>PPRA / RTL</span><span class="side-menu-caret">⌄</span></a>
           <a class="side-menu-item" href="notification.html"><span class="side-menu-icon">☍</span><span>Logbook IPCN</span></a>
           <a class="side-menu-item" href="report.html"><span class="side-menu-icon">☌</span><span>Laporan</span></a>
@@ -69,10 +70,10 @@
           <div>
             <p class="eyebrow">Kewaspadaan Isolasi</p>
             <h3>Formulir Audit dan Supervisi</h3>
-            <p class="workspace-subtitle">Dokumentasi terstruktur untuk 14 jenis kewaspadaan isolasi</p>
+            <p class="workspace-subtitle">Dokumentasi terstruktur untuk 29 jenis kewaspadaan isolasi</p>
           </div>
           <div class="isolation-progress">
-            <strong>14</strong>
+            <strong>29</strong>
             <span>jenis tersedia</span>
           </div>
         </section>
@@ -112,16 +113,51 @@
                     <small class="input-error" data-error-for="assessmentDate"></small>
                   </div>
                   <div class="field-row">
+                    <label for="isolationProfession">Profesi</label>
+                    <select id="isolationProfession" name="profession" required>
+                      <option value="">Pilih profesi</option>
+                      <option>Dokter</option>
+                      <option>Perawat</option>
+                      <option>Bidan</option>
+                      <option>Apoteker</option>
+                      <option>Tenaga Teknis Kefarmasian</option>
+                      <option>Analis Laboratorium Medis</option>
+                      <option>Radiografer</option>
+                      <option>Perekam Medis dan Informasi Kesehatan</option>
+                      <option>Petugas Gizi</option>
+                      <option>Teknisi Elektromedis</option>
+                      <option>Sanitarian / Kesehatan Lingkungan</option>
+                      <option>Refraksionis Optisien</option>
+                      <option>CSSD (Petugas Sterilisasi)</option>
+                      <option>Petugas Laundry</option>
+                      <option>Housekeeping (Cleaning Service)</option>
+                      <option>Tenaga Administrasi</option>
+                      <option>Lainnya</option>
+                    </select>
+                    <small class="input-error" data-error-for="profession"></small>
+                  </div>
+                  <div class="field-row">
                     <label for="isolationUnit">Unit</label>
                     <select id="isolationUnit" name="unit" required>
                       <option value="">Pilih unit</option>
-                      <option>ICU</option>
-                      <option>IGD</option>
+                      <option>Instalasi Gawat Darurat</option>
+                      <option>Instalasi Kamar Bedah</option>
+                      <option>Instalasi Rawat Jalan</option>
+                      <option>Instalasi Rawat Inap</option>
+                      <option>Instalasi Eksekutif</option>
                       <option>HCU</option>
-                      <option>Rawat Inap</option>
-                      <option>Rawat Jalan</option>
-                      <option>Kamar Operasi</option>
-                      <option>Laboratorium</option>
+                      <option>One Day Care (ODC)</option>
+                      <option>Instalasi CSSD dan Laundry/Binatu</option>
+                      <option>Instalasi Gizi</option>
+                      <option>Instalasi Laboratorium</option>
+                      <option>Instalasi Farmasi</option>
+                      <option>Instalasi Radiologi</option>
+                      <option>Instalasi Rekam Medis</option>
+                      <option>Ambulans</option>
+                      <option>Kamar Jenazah</option>
+                      <option>Instalasi Kesehatan Lingkungan/Housekeeping</option>
+                      <option>IPSRS</option>
+                      <option>Bank Mata</option>
                     </select>
                     <small class="input-error" data-error-for="unit"></small>
                   </div>
@@ -166,16 +202,36 @@
               </fieldset>
 
               <fieldset class="form-section">
+                <legend>Foto Temuan (opsional)</legend>
+                <div class="finding-photo-toolbar">
+                  <span id="findingPhotoCount">0 foto</span>
+                  <div class="finding-photo-actions">
+                    <label class="btn btn-secondary finding-photo-button">
+                      Kamera
+                      <input id="findingPhotoCamera" type="file" accept="image/*" capture="environment" hidden />
+                    </label>
+                    <label class="btn btn-secondary finding-photo-button">
+                      Unggah
+                      <input id="findingPhotoUpload" type="file" accept="image/*" multiple hidden />
+                    </label>
+                  </div>
+                </div>
+                <div class="finding-photo-grid" id="findingPhotoPreview" aria-live="polite"></div>
+                <p class="finding-photo-note">Ambil foto langsung dari kamera (HP) atau unggah dari galeri. Foto dikompres otomatis dan tersimpan bersama observasi.</p>
+              </fieldset>
+
+              <fieldset class="form-section">
                 <legend>Tanda Tangan Digital Auditor</legend>
                 <div class="signature-grid">
                   <div class="signature-pad-wrap">
+                    <p class="signature-location-date" id="signatureLocationDate">Bandung, tanggal belum dipilih</p>
                     <canvas id="auditorSignature" class="signature-pad" width="720" height="240" aria-label="Area tanda tangan digital auditor"></canvas>
                     <p>Gunakan mouse, stylus, atau jari untuk menandatangani.</p>
                   </div>
                   <div class="signature-details">
                     <div class="field-row">
                       <label for="signatureAuditorName">Nama Lengkap Auditor</label>
-                      <input id="signatureAuditorName" name="signatureName" type="text" maxlength="180" required />
+                      <input id="signatureAuditorName" name="signatureName" type="text" maxlength="180" readonly required />
                       <small class="input-error" data-error-for="signatureName"></small>
                     </div>
                     <button class="btn btn-secondary" id="clearSignatureButton" type="button">Hapus Tanda Tangan</button>
@@ -189,6 +245,7 @@
                 <div class="action-row">
                   <button class="btn btn-secondary" id="resetIsolationFormButton" type="button">Reset</button>
                   <button class="btn btn-secondary" id="saveIsolationDraftButton" type="button">Simpan Draft</button>
+                  <button class="btn btn-secondary" id="saveIsolationPdfButton" type="button">&#128196; Simpan PDF</button>
                   <button class="btn btn-primary" type="submit">Submit Formulir</button>
                 </div>
               </div>
