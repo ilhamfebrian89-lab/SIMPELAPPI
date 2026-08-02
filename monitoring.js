@@ -265,7 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <select data-assessment-score="${index}" aria-label="Nilai untuk ${item}" required>
               <option value="">Pilih nilai</option>
               <option value="2">Patuh</option>
-              <option value="1">Sebagian</option>
               <option value="0">Tidak patuh</option>
               <option value="na">Tidak berlaku</option>
             </select>
@@ -311,7 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return (
       {
         2: 'Ya',
-        1: 'Sebagian',
         0: 'Tidak',
         na: 'Tidak Berlaku'
       }[score] ?? 'Belum diisi'
@@ -488,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="score-item"><span>Jumlah Tidak</span><strong>${noCount}</strong></div>
                 <div class="score-item"><span>Persentase Kepatuhan</span><strong>${payload.score}%</strong></div>
               </div>
-              <p class="score-note">Nilai Sebagian dihitung 50%, sedangkan Tidak Berlaku tidak dimasukkan dalam persentase kepatuhan.</p>
+              <p class="score-note">Nilai Tidak Berlaku tidak dimasukkan dalam persentase kepatuhan.</p>
             </section>
 
             ${photoSection}
