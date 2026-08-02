@@ -29,6 +29,7 @@ Workflow yang memerlukan layanan eksternal dijalankan terpisah:
 - `index.html` — dashboard command center utama
 - `login.html` — halaman login
 - `monitoring.html` — form monitoring digital
+- `monitoring.js` — formulir audit dan supervisi 14 jenis kewaspadaan isolasi
 - `audit.html` — form audit digital
 - `surveilans.html` — form surveilans HAI
 - `rtl.html` — task management RTL

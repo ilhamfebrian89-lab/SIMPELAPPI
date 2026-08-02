@@ -7,6 +7,8 @@ $ErrorActionPreference = 'Stop'
 $resolvedRoot = (Resolve-Path $RootPath).Path
 $auditHtml = Join-Path $resolvedRoot 'audit.html'
 $auditJs = Join-Path $resolvedRoot 'audit.js'
+$monitoringHtml = Join-Path $resolvedRoot 'monitoring.html'
+$monitoringJs = Join-Path $resolvedRoot 'monitoring.js'
 $stylesCss = Join-Path $resolvedRoot 'styles.css'
 
 function Assert-FileExists {
@@ -34,6 +36,8 @@ Write-Host '[SIMPELAPPI] Validating audit page files...' -ForegroundColor Cyan
 
 Assert-FileExists -PathToCheck $auditHtml
 Assert-FileExists -PathToCheck $auditJs
+Assert-FileExists -PathToCheck $monitoringHtml
+Assert-FileExists -PathToCheck $monitoringJs
 Assert-FileExists -PathToCheck $stylesCss
 
 Assert-Contains -PathToCheck $auditHtml -Pattern '<script src="audit\.js"></script>' -Description 'external audit.js include'
@@ -50,11 +54,17 @@ Assert-Contains -PathToCheck $auditJs -Pattern 'restoreResetSnapshotFromSession\
 Assert-Contains -PathToCheck $auditJs -Pattern 'window\.addEventListener\(\x27pagehide\x27, handlePageHide\)' -Description 'pagehide flush handler'
 Assert-Contains -PathToCheck $auditJs -Pattern 'success-state\.html' -Description 'success redirect target'
 
+Assert-Contains -PathToCheck $monitoringHtml -Pattern '<script src="monitoring\.js" defer></script>' -Description 'monitoring form script'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="isolationAssessmentForm"' -Description 'isolation assessment form'
+Assert-Contains -PathToCheck $monitoringHtml -Pattern 'id="auditorSignature"' -Description 'digital signature canvas'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'const isolationCategories = \[' -Description 'isolation category configuration'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'id: \x27transport\x27' -Description 'fourteenth isolation category'
+Assert-Contains -PathToCheck $monitoringJs -Pattern 'signatureCanvas\.toDataURL' -Description 'digital signature capture'
+
 Assert-Contains -PathToCheck $stylesCss -Pattern '\.autosave-activity\.is-active::after' -Description 'autosave animation'
 Assert-Contains -PathToCheck $stylesCss -Pattern 'prefers-reduced-motion: reduce' -Description 'reduced motion support'
 
 Assert-FileExists -PathToCheck (Join-Path $resolvedRoot 'index.html')
-Assert-FileExists -PathToCheck (Join-Path $resolvedRoot 'monitoring.html')
 Assert-FileExists -PathToCheck (Join-Path $resolvedRoot 'rtl.html')
 Assert-FileExists -PathToCheck (Join-Path $resolvedRoot 'error-state.html')
 Assert-FileExists -PathToCheck (Join-Path $resolvedRoot 'success-state.html')

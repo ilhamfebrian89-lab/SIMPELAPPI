@@ -21,6 +21,7 @@ jobs:
         run: |
           node --check shell.js
           node --check audit.js
+          node --check monitoring.js
 
       - name: Run static audit page checks
         shell: pwsh
